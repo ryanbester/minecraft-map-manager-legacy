@@ -38,6 +38,7 @@
             Me.btnFileLoad = New System.Windows.Forms.Button()
             Me.lblDataVersionName = New System.Windows.Forms.Label()
             Me.getVersionWorker = New System.ComponentModel.BackgroundWorker()
+            Me.btnSaveAs = New System.Windows.Forms.Button()
             CType(Me.txtIDCount, System.ComponentModel.ISupportInitialize).BeginInit()
             CType(Me.txtDataVersion, System.ComponentModel.ISupportInitialize).BeginInit()
             Me.SuspendLayout()
@@ -105,9 +106,9 @@
             '
             'btnListDataVersion
             '
+            Me.btnListDataVersion.Enabled = False
             Me.btnListDataVersion.Location = New System.Drawing.Point(228, 176)
             Me.btnListDataVersion.Name = "btnListDataVersion"
-            Me.btnListDataVersion.Enabled = False
             Me.btnListDataVersion.Size = New System.Drawing.Size(75, 23)
             Me.btnListDataVersion.TabIndex = 6
             Me.btnListDataVersion.Text = "List..."
@@ -117,6 +118,7 @@
             '
             Me.btnSave.Location = New System.Drawing.Point(327, 216)
             Me.btnSave.Name = "btnSave"
+            Me.btnSave.Enabled = False
             Me.btnSave.Size = New System.Drawing.Size(75, 23)
             Me.btnSave.TabIndex = 7
             Me.btnSave.Text = "Save"
@@ -124,7 +126,7 @@
             '
             'btnCancel
             '
-            Me.btnCancel.Location = New System.Drawing.Point(246, 216)
+            Me.btnCancel.Location = New System.Drawing.Point(165, 216)
             Me.btnCancel.Name = "btnCancel"
             Me.btnCancel.Size = New System.Drawing.Size(75, 23)
             Me.btnCancel.TabIndex = 8
@@ -147,7 +149,6 @@
             Me.txtFile.Name = "txtFile"
             Me.txtFile.Size = New System.Drawing.Size(192, 20)
             Me.txtFile.TabIndex = 10
-            Me.txtFile.Text = "(No file selected)"
             '
             'btnFileBrowse
             '
@@ -180,11 +181,22 @@
             'getVersionWorker
             '
             '
+            'btnSaveAs
+            '
+            Me.btnSaveAs.Location = New System.Drawing.Point(246, 216)
+            Me.btnSaveAs.Name = "btnSaveAs"
+            Me.btnSaveAs.Enabled = False
+            Me.btnSaveAs.Size = New System.Drawing.Size(75, 23)
+            Me.btnSaveAs.TabIndex = 14
+            Me.btnSaveAs.Text = "Save As..."
+            Me.btnSaveAs.UseVisualStyleBackColor = True
+            '
             'EditIDCounts
             '
             Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
             Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
             Me.ClientSize = New System.Drawing.Size(414, 251)
+            Me.Controls.Add(Me.btnSaveAs)
             Me.Controls.Add(Me.lblDataVersionName)
             Me.Controls.Add(Me.btnFileLoad)
             Me.Controls.Add(Me.btnFileBrowse)
@@ -230,5 +242,6 @@
         Friend WithEvents btnFileLoad As Button
         Friend WithEvents lblDataVersionName As Label
         Friend WithEvents getVersionWorker As System.ComponentModel.BackgroundWorker
+        Friend WithEvents btnSaveAs As Button
     End Class
 End NameSpace
