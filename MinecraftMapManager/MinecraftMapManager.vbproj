@@ -77,12 +77,22 @@
     <Import Include="System.Threading.Tasks" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="DataVersions.vb" />
-    <Compile Include="MapColours.vb" />
+    <Compile Include="Data\DataVersions.vb" />
+    <Compile Include="Data\IDatFile.vb" />
+    <Compile Include="Data\IdCountsFile.vb" />
+    <Compile Include="Data\MapColours.vb" />
+    <Compile Include="Data\MapFile.vb" />
+    <Compile Include="Data\NbtExtensions.vb" />
     <Compile Include="UI\AboutDialog.Designer.vb">
       <DependentUpon>AboutDialog.vb</DependentUpon>
     </Compile>
     <Compile Include="UI\AboutDialog.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="UI\EditMapDAT.Designer.vb">
+      <DependentUpon>EditMapDAT.vb</DependentUpon>
+    </Compile>
+    <Compile Include="UI\EditMapDAT.vb">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="UI\EditIDCounts.Designer.vb">
@@ -119,6 +129,12 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
+    <Compile Include="UI\Controls\VersionBackgroundWorker.Designer.vb">
+      <DependentUpon>VersionBackgroundWorker.vb</DependentUpon>
+    </Compile>
+    <Compile Include="UI\Controls\VersionBackgroundWorker.vb">
+      <SubType>Component</SubType>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="UI\AboutDialog.resx">
@@ -126,6 +142,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="UI\EditIDCounts.resx">
       <DependentUpon>EditIDCounts.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UI\EditMapDAT.resx">
+      <DependentUpon>EditMapDAT.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="UI\ListDataVersions.resx">
       <DependentUpon>ListDataVersions.vb</DependentUpon>
@@ -154,5 +173,6 @@
     <None Include="App.config" />
     <None Include="packages.config" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.VisualBasic.targets" />
 </Project>

@@ -1,6 +1,6 @@
 ﻿Namespace UI
     <Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()> _
-    Partial Class EditIDCounts
+    Partial Class EditIdCounts
         Inherits System.Windows.Forms.Form
 
         'Form overrides dispose to clean up the component list.
@@ -37,7 +37,7 @@
             Me.btnFileBrowse = New System.Windows.Forms.Button()
             Me.btnFileLoad = New System.Windows.Forms.Button()
             Me.lblDataVersionName = New System.Windows.Forms.Label()
-            Me.getVersionWorker = New System.ComponentModel.BackgroundWorker()
+            Me.getVersionWorker = New MinecraftMapManager.UI.Controls.VersionBackgroundWorker()
             Me.btnSaveAs = New System.Windows.Forms.Button()
             CType(Me.txtIDCount, System.ComponentModel.ISupportInitialize).BeginInit()
             CType(Me.txtDataVersion, System.ComponentModel.ISupportInitialize).BeginInit()
@@ -116,9 +116,9 @@
             '
             'btnSave
             '
+            Me.btnSave.Enabled = False
             Me.btnSave.Location = New System.Drawing.Point(327, 216)
             Me.btnSave.Name = "btnSave"
-            Me.btnSave.Enabled = False
             Me.btnSave.Size = New System.Drawing.Size(75, 23)
             Me.btnSave.TabIndex = 7
             Me.btnSave.Text = "Save"
@@ -180,18 +180,20 @@
             '
             'getVersionWorker
             '
+            Me.getVersionWorker.DataVersionControl = Me.txtDataVersion
+            Me.getVersionWorker.VersionLabel = Me.lblDataVersionName
             '
             'btnSaveAs
             '
+            Me.btnSaveAs.Enabled = False
             Me.btnSaveAs.Location = New System.Drawing.Point(246, 216)
             Me.btnSaveAs.Name = "btnSaveAs"
-            Me.btnSaveAs.Enabled = False
             Me.btnSaveAs.Size = New System.Drawing.Size(75, 23)
             Me.btnSaveAs.TabIndex = 14
             Me.btnSaveAs.Text = "Save As..."
             Me.btnSaveAs.UseVisualStyleBackColor = True
             '
-            'EditIDCounts
+            'EditIdCounts
             '
             Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
             Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
@@ -214,7 +216,7 @@
             Me.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog
             Me.MaximizeBox = False
             Me.MinimizeBox = False
-            Me.Name = "EditIDCounts"
+            Me.Name = "EditIdCounts"
             Me.ShowInTaskbar = False
             Me.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Hide
             Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent
@@ -241,7 +243,7 @@
         Friend WithEvents btnFileBrowse As Button
         Friend WithEvents btnFileLoad As Button
         Friend WithEvents lblDataVersionName As Label
-        Friend WithEvents getVersionWorker As System.ComponentModel.BackgroundWorker
+        Friend WithEvents getVersionWorker As Controls.VersionBackgroundWorker
         Friend WithEvents btnSaveAs As Button
     End Class
 End NameSpace

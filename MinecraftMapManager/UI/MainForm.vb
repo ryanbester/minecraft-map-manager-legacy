@@ -4,7 +4,8 @@ Namespace UI
 
     Public Class MainForm
         Private Sub btnOpenMapDAT_Click(sender As Object, e As EventArgs) Handles btnOpenMapDAT.Click
-
+            Dim editMapDlg = New EditMapDAT()
+            editMapDlg.ShowDialog()
         End Sub
 
         Private Sub btnOpenSave_Click(sender As Object, e As EventArgs) Handles btnOpenSave.Click
