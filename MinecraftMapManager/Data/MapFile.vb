@@ -14,6 +14,10 @@ Namespace Data
 
         Public Dim MapColours As Byte()
 
+        ' Colour Overlays
+        Public Dim MapColoursImage As Byte() = New Byte(16383) {}
+        Public Dim MapColoursManual As Byte() = New Byte(16383) {}
+
         Public Dim DataVersion As Integer
         Public Dim CompressionType As NbtCompression
 
@@ -28,6 +32,22 @@ Namespace Data
 
         Public Sub New(fileName As String)
             _fileName = fileName
+
+            Memset (Of Byte)(MapColoursImage, 255, 16384)
+            Memset (Of Byte)(MapColoursManual, 255, 16384)
+        End Sub
+
+        Public Sub CreateNew() Implements IDatFile.CreateNew
+            Dim rootTag = new NbtCompound("")
+            Dim dataTag = New NbtCompound("data")
+
+            rootTag.SetValue(dataTag)
+            _nbtFile = New NbtFile(rootTag)
+
+            CompressionType = NbtCompression.GZip
+
+            MapColours = New Byte(16383) {}
+            Memset (Of Byte)(MapColours, 0, 16384)
         End Sub
 
         Public Sub LoadData() Implements IDatFile.LoadData
@@ -102,9 +122,9 @@ Namespace Data
                 _nbtFile.RootTag.SetValue(New NbtInt("DataVersion", DataVersion))
                 Dim dataTag = _nbtFile.RootTag.Get (Of NbtCompound)("data")
 
-                dataTag.SetValue(New NbtInt("DataVersion", DataVersion))
-
-                dataTag.SetValue(New NbtByteArray("colors", MapColours))
+                Dim overlayColours = Data.MapColours.CombineLayers(MapColoursImage, MapColoursManual)
+                Dim finalColours = Data.MapColours.CombineLayers(MapColours, overlayColours)
+                dataTag.SetValue(New NbtByteArray("colors", finalColours))
 
                 dataTag.SetValue(New NbtByte("scale", Scale))
 

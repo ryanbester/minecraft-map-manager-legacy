@@ -13,7 +13,9 @@ Namespace UI
         End Sub
 
         Private Sub btnCreateMapDAT_Click(sender As Object, e As EventArgs) Handles btnCreateMapDAT.Click
-
+            Dim editMapDlg = New EditMapDAT()
+            editMapDlg.CreateNew()
+            editMapDlg.ShowDialog()
         End Sub
 
         Private Sub btnEditIdcounts_Click(sender As Object, e As EventArgs) Handles btnEditIdcounts.Click

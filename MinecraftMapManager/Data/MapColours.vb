@@ -5,9 +5,9 @@ Imports fNbt
 
 Namespace Data
     Public Class MapColours
-        Private Shared ReadOnly Dim VariantTable = New Double(3) {0.71, 0.86, 1.0, 0.53}
+        Public Shared ReadOnly Dim VariantTable = New Double(3) {0.71, 0.86, 1.0, 0.53}
 
-        Private Shared ReadOnly Dim ColourTable = New List(Of Color) From
+        Public Shared ReadOnly Dim ColourTable = New List(Of Color) From
             {
             Color.FromArgb(0, 255, 255, 255),
             Color.FromArgb(255, 127, 178, 56),
@@ -70,6 +70,21 @@ Namespace Data
             Color.FromArgb(255, 20, 180, 133)
             }
 
+        Public Shared ReadOnly Dim ColourNames = New List(Of String) From
+            {
+            "0 NONE", "1 GRASS", "2 SAND", "3 WOOL", "4 FIRE", "5 ICE", "6 METAL", "7 PLANT", "8 SNOW", "9 CLAY",
+            "10 DIRT", "11 STONE", "12 WATER", "13 WOOD", "14 QUARTZ", "15 COLOR_ORANGE", "16 COLOR_MAGENTA",
+            "17 COLOR_LIGHT_BLUE", "18 COLOR_YELLOW", "19 COLOR_LIGHT_GREEN", "20 COLOR_PINK", "21 COLOR_GRAY",
+            "22 COLOR_LIGHT_GRAY", "23 COLOR_CYAN", "24 COLOR_PURPLE", "25 COLOR_BLUE", "26 COLOR_BROWN",
+            "27 COLOR_GREEN", "28 COLOR_RED", "29 COLOR_BLACK", "30 GOLD", "31 DIAMOND", "32 LAPIS", "33 EMERALD",
+            "34 PODZOL", "35 NETHER", "36 TERRACOTTA_WHITE", "37 TERRACOTTA_ORANGE", "38 TERRACOTTA_MAGENTA",
+            "39 TERRACOTTA_LIGHT_BLUE", "40 TERRACOTTA_YELLOW", "41 TERRACOTTA_LIGHT_GREEN", "42 TERRACOTTA_PINK",
+            "43 TERRACOTTA_GRAY", "44 TERRACOTTA_LIGHT_GRAY", "45 TERRACOTTA_CYAN", "46 TERRACOTTA_PURPLE",
+            "47 TERRACOTTA_BLUE", "48 TERRACOTTA_BROWN", "49 TERRACOTTA_GREEN", "50 TERRACOTTA_RED",
+            "51 TERRACOTTA_BLACK", "52 CRIMSON_NYLIUM", "53 CRIMSON_STEM", "54 CRIMSON_HYPHAE", "55 WARPED_NYLIUM",
+            "56 WARPED_STEM", "57 WARPED_HYPHAE", "58 WARPED_WART_BLOCK"
+            }
+
         Public Shared Function CreateBitmapFromMap(colours As Byte()) As Bitmap
             Try
                 Dim bitmap = New Bitmap(128, 128)
@@ -80,13 +95,7 @@ Namespace Data
                     Dim row = Math.Floor(i/128)
                     Dim column = i - (row*128)
 
-                    Dim base = Math.Floor(colour/4)
-                    Dim variation = colour Mod 4
-
-                    Dim multiplier = VariantTable(variation)
-                    Dim baseColour = ColourTable(base)
-                    Dim rgbColour = Color.FromArgb(baseColour.A, baseColour.R*multiplier, baseColour.G*multiplier,
-                                                   baseColour.B*multiplier)
+                    Dim rgbColour = GetRgbColour(colour)
                     bitmap.SetPixel(column, row, rgbColour)
                 Next
 
@@ -127,5 +136,36 @@ Namespace Data
             gr.DrawImage(bitmap, 0, 0, CInt(bitmap.Width*scale), CInt(bitmap.Height*scale))
             Return upscaledBitmap
         End Function
+
+        Public Shared Function GetRgbColour(colour As Byte)
+            Dim base = Math.Floor(colour/4)
+            Dim variation = colour Mod 4
+
+            Dim multiplier = VariantTable(variation)
+            Dim baseColour = ColourTable(base)
+            Dim rgbColour = Color.FromArgb(baseColour.A, baseColour.R*multiplier, baseColour.G*multiplier,
+                                           baseColour.B*multiplier)
+            Return rgbColour
+        End Function
+
+        Public Shared Function CombineLayers(bottom As Byte(), top As Byte()) As Byte()
+            Dim newLayer = bottom.Clone()
+
+            For i = 0 To top.Length - 1
+                If top(i) < 255
+                    newLayer(i) = top(i)
+                End If
+            Next
+
+            Return newLayer
+        End Function
+
+        Public Shared Sub SetPixel(ByRef layer As Byte(), x As Integer, y As Integer, colour As Byte)
+            Dim pos = (y*128) + x
+
+            If pos > - 1 And pos < layer.Length
+                layer(pos) = colour
+            End If
+        End Sub
     End Class
 End NameSpace

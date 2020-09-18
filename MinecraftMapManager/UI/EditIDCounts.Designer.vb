@@ -39,6 +39,7 @@
             Me.lblDataVersionName = New System.Windows.Forms.Label()
             Me.getVersionWorker = New MinecraftMapManager.UI.Controls.VersionBackgroundWorker()
             Me.btnSaveAs = New System.Windows.Forms.Button()
+            Me.btnCreateNew = New System.Windows.Forms.Button()
             CType(Me.txtIDCount, System.ComponentModel.ISupportInitialize).BeginInit()
             CType(Me.txtDataVersion, System.ComponentModel.ISupportInitialize).BeginInit()
             Me.SuspendLayout()
@@ -69,7 +70,7 @@
             '
             Me.lblID.AutoSize = True
             Me.lblID.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-            Me.lblID.Location = New System.Drawing.Point(12, 144)
+            Me.lblID.Location = New System.Drawing.Point(12, 152)
             Me.lblID.Name = "lblID"
             Me.lblID.Size = New System.Drawing.Size(93, 16)
             Me.lblID.TabIndex = 2
@@ -78,7 +79,7 @@
             'txtIDCount
             '
             Me.txtIDCount.Enabled = False
-            Me.txtIDCount.Location = New System.Drawing.Point(128, 144)
+            Me.txtIDCount.Location = New System.Drawing.Point(128, 152)
             Me.txtIDCount.Maximum = New Decimal(New Integer() {32767, 0, 0, 0})
             Me.txtIDCount.Name = "txtIDCount"
             Me.txtIDCount.Size = New System.Drawing.Size(94, 20)
@@ -88,7 +89,7 @@
             '
             Me.lblDataVersion.AutoSize = True
             Me.lblDataVersion.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-            Me.lblDataVersion.Location = New System.Drawing.Point(12, 176)
+            Me.lblDataVersion.Location = New System.Drawing.Point(12, 184)
             Me.lblDataVersion.Name = "lblDataVersion"
             Me.lblDataVersion.Size = New System.Drawing.Size(89, 16)
             Me.lblDataVersion.TabIndex = 4
@@ -97,7 +98,7 @@
             'txtDataVersion
             '
             Me.txtDataVersion.Enabled = False
-            Me.txtDataVersion.Location = New System.Drawing.Point(128, 176)
+            Me.txtDataVersion.Location = New System.Drawing.Point(128, 184)
             Me.txtDataVersion.Maximum = New Decimal(New Integer() {32767, 0, 0, 0})
             Me.txtDataVersion.Name = "txtDataVersion"
             Me.txtDataVersion.Size = New System.Drawing.Size(94, 20)
@@ -107,7 +108,7 @@
             'btnListDataVersion
             '
             Me.btnListDataVersion.Enabled = False
-            Me.btnListDataVersion.Location = New System.Drawing.Point(228, 176)
+            Me.btnListDataVersion.Location = New System.Drawing.Point(228, 184)
             Me.btnListDataVersion.Name = "btnListDataVersion"
             Me.btnListDataVersion.Size = New System.Drawing.Size(75, 23)
             Me.btnListDataVersion.TabIndex = 6
@@ -117,7 +118,7 @@
             'btnSave
             '
             Me.btnSave.Enabled = False
-            Me.btnSave.Location = New System.Drawing.Point(327, 216)
+            Me.btnSave.Location = New System.Drawing.Point(327, 224)
             Me.btnSave.Name = "btnSave"
             Me.btnSave.Size = New System.Drawing.Size(75, 23)
             Me.btnSave.TabIndex = 7
@@ -126,7 +127,7 @@
             '
             'btnCancel
             '
-            Me.btnCancel.Location = New System.Drawing.Point(165, 216)
+            Me.btnCancel.Location = New System.Drawing.Point(165, 224)
             Me.btnCancel.Name = "btnCancel"
             Me.btnCancel.Size = New System.Drawing.Size(75, 23)
             Me.btnCancel.TabIndex = 8
@@ -172,7 +173,7 @@
             '
             Me.lblDataVersionName.AutoSize = True
             Me.lblDataVersionName.ForeColor = System.Drawing.SystemColors.ControlText
-            Me.lblDataVersionName.Location = New System.Drawing.Point(309, 181)
+            Me.lblDataVersionName.Location = New System.Drawing.Point(309, 189)
             Me.lblDataVersionName.Name = "lblDataVersionName"
             Me.lblDataVersionName.Size = New System.Drawing.Size(92, 13)
             Me.lblDataVersionName.TabIndex = 13
@@ -186,18 +187,28 @@
             'btnSaveAs
             '
             Me.btnSaveAs.Enabled = False
-            Me.btnSaveAs.Location = New System.Drawing.Point(246, 216)
+            Me.btnSaveAs.Location = New System.Drawing.Point(246, 224)
             Me.btnSaveAs.Name = "btnSaveAs"
             Me.btnSaveAs.Size = New System.Drawing.Size(75, 23)
             Me.btnSaveAs.TabIndex = 14
             Me.btnSaveAs.Text = "Save As..."
             Me.btnSaveAs.UseVisualStyleBackColor = True
             '
+            'btnCreateNew
+            '
+            Me.btnCreateNew.Location = New System.Drawing.Point(251, 119)
+            Me.btnCreateNew.Name = "btnCreateNew"
+            Me.btnCreateNew.Size = New System.Drawing.Size(156, 23)
+            Me.btnCreateNew.TabIndex = 15
+            Me.btnCreateNew.Text = "Create New"
+            Me.btnCreateNew.UseVisualStyleBackColor = True
+            '
             'EditIdCounts
             '
             Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
             Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-            Me.ClientSize = New System.Drawing.Size(414, 251)
+            Me.ClientSize = New System.Drawing.Size(414, 260)
+            Me.Controls.Add(Me.btnCreateNew)
             Me.Controls.Add(Me.btnSaveAs)
             Me.Controls.Add(Me.lblDataVersionName)
             Me.Controls.Add(Me.btnFileLoad)
@@ -245,5 +256,6 @@
         Friend WithEvents lblDataVersionName As Label
         Friend WithEvents getVersionWorker As Controls.VersionBackgroundWorker
         Friend WithEvents btnSaveAs As Button
+        Friend WithEvents btnCreateNew As Button
     End Class
 End NameSpace

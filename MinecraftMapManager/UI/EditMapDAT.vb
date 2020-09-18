@@ -99,9 +99,34 @@ Namespace UI
         End Function
 
         Private Sub UpdatePreview()
-            Dim bitmap = MapColours.CreateBitmapFromMap(_mapFile.MapColours)
+            Dim colours = MapColours.CombineLayers(_mapFile.MapColoursImage, _mapFile.MapColoursManual)
+            colours = MapColours.CombineLayers(_mapFile.MapColours, colours)
+
+            Dim bitmap = MapColours.CreateBitmapFromMap(colours)
             Dim upscaledBitmap = MapColours.UpscaleBitmap(bitmap, 2)
             picMapPreview.Image = upscaledBitmap
+        End Sub
+
+        Private Sub btnCreateNew_Click(sender As Object, e As EventArgs) Handles btnCreateNew.Click
+            CreateNew()
+        End Sub
+
+        Public Sub CreateNew()
+            Try
+                _mapFile = New MapFile(Nothing)
+                _mapFile.CreateNew()
+
+                cmbCompressionType.SelectedIndex = 1
+                cmbDimension.SelectedIndex = 0
+
+                UpdatePreview()
+
+                EnableControls()
+                EnableControlsForNew()
+            Catch ex As Exception
+                MessageBox.Show(Me, "Cannot create new file", "Minecraft Map Manager", MessageBoxButtons.OK,
+                                MessageBoxIcon.Error)
+            End Try
         End Sub
 
         Private Sub EnableControls()
@@ -124,8 +149,20 @@ Namespace UI
             btnBanners.Enabled = True
             btnMarkers.Enabled = True
 
+            grpImage.Enabled = False
+
             btnSave.Enabled = True
             btnSaveAs.Enabled = True
+        End Sub
+
+        Private Sub EnableControlsForNew()
+            txtFile.Enabled = False
+            btnFileBrowse.Enabled = False
+            btnFileLoad.Enabled = False
+
+            grpImage.Enabled = True
+
+            btnSave.Enabled = False
         End Sub
 
         Private Sub btnCancel_Click(sender As Object, e As EventArgs) Handles btnCancel.Click
@@ -285,6 +322,10 @@ Namespace UI
         End Function
 
         Private Sub btnEditColors_Click(sender As Object, e As EventArgs) Handles btnEditColors.Click
+            Dim editColorsDlg = New MapEditColors()
+            editColorsDlg.MapFile = _mapFile
+            editColorsDlg.ShowDialog()
+            UpdatePreview()
         End Sub
     End Class
 End NameSpace

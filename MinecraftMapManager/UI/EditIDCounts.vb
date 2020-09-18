@@ -34,6 +34,18 @@ Namespace UI
             End Try
         End Sub
 
+        Private Sub btnCreateNew_Click(sender As Object, e As EventArgs) Handles btnCreateNew.Click
+            Try
+                _idCountsFile = New IdCountsFile(Nothing)
+                _idCountsFile.CreateNew()
+
+                EnableControlsForNew()
+            Catch ex As Exception
+                MessageBox.Show(Me, "Cannot create new file", "Minecraft Map Manager", MessageBoxButtons.OK,
+                                MessageBoxIcon.Error)
+            End Try
+        End Sub
+
         Private Sub EnableControls()
             txtDataVersion.Enabled = True
             btnListDataVersion.Enabled = True
@@ -42,12 +54,23 @@ Namespace UI
             btnSaveAs.Enabled = True
         End Sub
 
+        Private Sub EnableControlsForNew()
+            txtFile.Enabled = False
+            btnFileBrowse.Enabled = False
+            btnFileLoad.Enabled = False
+            txtDataVersion.Enabled = True
+            btnListDataVersion.Enabled = True
+            txtIDCount.Enabled = True
+            btnSave.Enabled = False
+            btnSaveAs.Enabled = True
+        End Sub
+
         Private Sub btnCancel_Click(sender As Object, e As EventArgs) Handles btnCancel.Click
             Close()
         End Sub
 
         Private Sub btnSave_Click(sender As Object, e As EventArgs) Handles btnSave.Click
-            If _idCountsFile Is Nothing
+            If _idCountsFile Is Nothing Then
                 MessageBox.Show(Me, "No data to save", "Minecraft Map Manager", MessageBoxButtons.OK,
                                 MessageBoxIcon.Error)
                 Return
@@ -65,7 +88,7 @@ Namespace UI
         End Sub
 
         Private Sub btnSaveAs_Click(sender As Object, e As EventArgs) Handles btnSaveAs.Click
-            If _idCountsFile Is Nothing
+            If _idCountsFile Is Nothing Then
                 MessageBox.Show(Me, "No data to save", "Minecraft Map Manager", MessageBoxButtons.OK,
                                 MessageBoxIcon.Error)
                 Return
@@ -76,9 +99,16 @@ Namespace UI
             saveFileDlg.RestoreDirectory = True
             saveFileDlg.Title = "Save idcounts.dat file"
 
-            If saveFileDlg.ShowDialog() = DialogResult.OK
-                PrepareForSave()
-                _idCountsFile.SaveData(saveFileDlg.FileName)
+            If saveFileDlg.ShowDialog() = DialogResult.OK Then
+                Try
+                    PrepareForSave()
+                    _idCountsFile.SaveData(saveFileDlg.FileName)
+                    MessageBox.Show(Me, "Saved to file successfully", "Minecraft Map Manager", MessageBoxButtons.OK,
+                                    MessageBoxIcon.Information)
+                Catch ex As Exception
+                    MessageBox.Show(Me, "Error saving to file", "Minecraft Map Manager", MessageBoxButtons.OK,
+                                    MessageBoxIcon.Error)
+                End Try
             End If
         End Sub
 
