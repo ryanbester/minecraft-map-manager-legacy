@@ -58,6 +58,7 @@
             Me.grpFile = New System.Windows.Forms.GroupBox()
             Me.grpMap = New System.Windows.Forms.GroupBox()
             Me.lblCenter = New System.Windows.Forms.Label()
+            Me.btnMapHeightmapSave = New System.Windows.Forms.Button()
             CType(Me.txtDataVersion, System.ComponentModel.ISupportInitialize).BeginInit()
             CType(Me.picMapPreview, System.ComponentModel.ISupportInitialize).BeginInit()
             CType(Me.txtScale, System.ComponentModel.ISupportInitialize).BeginInit()
@@ -203,6 +204,7 @@
             '
             'txtScale
             '
+            Me.txtScale.Enabled = False
             Me.txtScale.Location = New System.Drawing.Point(108, 19)
             Me.txtScale.Maximum = New Decimal(New Integer() {4, 0, 0, 0})
             Me.txtScale.Name = "txtScale"
@@ -223,6 +225,7 @@
             'cmbDimension
             '
             Me.cmbDimension.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
+            Me.cmbDimension.Enabled = False
             Me.cmbDimension.FormattingEnabled = True
             Me.cmbDimension.Items.AddRange(New Object() {"The Overworld", "The Nether", "The End"})
             Me.cmbDimension.Location = New System.Drawing.Point(107, 48)
@@ -233,6 +236,7 @@
             'chkTracking
             '
             Me.chkTracking.AutoSize = True
+            Me.chkTracking.Enabled = False
             Me.chkTracking.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
             Me.chkTracking.Location = New System.Drawing.Point(107, 75)
             Me.chkTracking.Name = "chkTracking"
@@ -244,6 +248,7 @@
             'chkUnlimitedTracking
             '
             Me.chkUnlimitedTracking.AutoSize = True
+            Me.chkUnlimitedTracking.Enabled = False
             Me.chkUnlimitedTracking.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
             Me.chkUnlimitedTracking.Location = New System.Drawing.Point(193, 75)
             Me.chkUnlimitedTracking.Name = "chkUnlimitedTracking"
@@ -255,6 +260,7 @@
             'chkLocked
             '
             Me.chkLocked.AutoSize = True
+            Me.chkLocked.Enabled = False
             Me.chkLocked.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
             Me.chkLocked.Location = New System.Drawing.Point(107, 101)
             Me.chkLocked.Name = "chkLocked"
@@ -265,6 +271,7 @@
             '
             'txtX
             '
+            Me.txtX.Enabled = False
             Me.txtX.Location = New System.Drawing.Point(108, 155)
             Me.txtX.Maximum = New Decimal(New Integer() {60000000, 0, 0, 0})
             Me.txtX.Minimum = New Decimal(New Integer() {60000000, 0, 0, -2147483648})
@@ -285,6 +292,7 @@
             '
             'txtZ
             '
+            Me.txtZ.Enabled = False
             Me.txtZ.Location = New System.Drawing.Point(107, 181)
             Me.txtZ.Maximum = New Decimal(New Integer() {60000000, 0, 0, 0})
             Me.txtZ.Minimum = New Decimal(New Integer() {60000000, 0, 0, -2147483648})
@@ -305,6 +313,7 @@
             '
             'btnBanners
             '
+            Me.btnBanners.Enabled = False
             Me.btnBanners.Location = New System.Drawing.Point(107, 210)
             Me.btnBanners.Name = "btnBanners"
             Me.btnBanners.Size = New System.Drawing.Size(75, 23)
@@ -314,6 +323,7 @@
             '
             'btnMarkers
             '
+            Me.btnMarkers.Enabled = False
             Me.btnMarkers.Location = New System.Drawing.Point(188, 210)
             Me.btnMarkers.Name = "btnMarkers"
             Me.btnMarkers.Size = New System.Drawing.Size(75, 23)
@@ -323,11 +333,12 @@
             '
             'btnEditColors
             '
-            Me.btnEditColors.Location = New System.Drawing.Point(68, 316)
+            Me.btnEditColors.Enabled = False
+            Me.btnEditColors.Location = New System.Drawing.Point(84, 316)
             Me.btnEditColors.Name = "btnEditColors"
-            Me.btnEditColors.Size = New System.Drawing.Size(157, 23)
+            Me.btnEditColors.Size = New System.Drawing.Size(124, 23)
             Me.btnEditColors.TabIndex = 32
-            Me.btnEditColors.Text = "Edit Colours Manually..."
+            Me.btnEditColors.Text = "Edit Colours..."
             Me.btnEditColors.UseVisualStyleBackColor = True
             '
             'lblNbtCompressionType
@@ -343,7 +354,8 @@
             '
             'btnMapImageSave
             '
-            Me.btnMapImageSave.Location = New System.Drawing.Point(84, 287)
+            Me.btnMapImageSave.Enabled = False
+            Me.btnMapImageSave.Location = New System.Drawing.Point(18, 287)
             Me.btnMapImageSave.Name = "btnMapImageSave"
             Me.btnMapImageSave.Size = New System.Drawing.Size(124, 23)
             Me.btnMapImageSave.TabIndex = 35
@@ -358,6 +370,7 @@
             'cmbCompressionType
             '
             Me.cmbCompressionType.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
+            Me.cmbCompressionType.Enabled = False
             Me.cmbCompressionType.FormattingEnabled = True
             Me.cmbCompressionType.Items.AddRange(New Object() {"None", "GZip", "ZLib"})
             Me.cmbCompressionType.Location = New System.Drawing.Point(176, 25)
@@ -367,6 +380,7 @@
             '
             'grpPreview
             '
+            Me.grpPreview.Controls.Add(Me.btnMapHeightmapSave)
             Me.grpPreview.Controls.Add(Me.btnEditColors)
             Me.grpPreview.Controls.Add(Me.picMapPreview)
             Me.grpPreview.Controls.Add(Me.btnMapImageSave)
@@ -425,6 +439,16 @@
             Me.lblCenter.Size = New System.Drawing.Size(80, 16)
             Me.lblCenter.TabIndex = 30
             Me.lblCenter.Text = "Map Center:"
+            '
+            'btnMapHeightmapSave
+            '
+            Me.btnMapHeightmapSave.Enabled = False
+            Me.btnMapHeightmapSave.Location = New System.Drawing.Point(150, 287)
+            Me.btnMapHeightmapSave.Name = "btnMapHeightmapSave"
+            Me.btnMapHeightmapSave.Size = New System.Drawing.Size(124, 23)
+            Me.btnMapHeightmapSave.TabIndex = 36
+            Me.btnMapHeightmapSave.Text = "Save Heightmap..."
+            Me.btnMapHeightmapSave.UseVisualStyleBackColor = True
             '
             'EditMapDat
             '
@@ -501,5 +525,6 @@
         Friend WithEvents grpFile As GroupBox
         Friend WithEvents grpMap As GroupBox
         Friend WithEvents lblCenter As Label
+        Friend WithEvents btnMapHeightmapSave As Button
     End Class
 End NameSpace

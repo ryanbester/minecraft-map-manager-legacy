@@ -4,7 +4,6 @@ Imports System.IO
 Imports fNbt
 
 Namespace Data
-
     Public Class MapColours
         Private Shared ReadOnly Dim VariantTable = New Double(3) {0.71, 0.86, 1.0, 0.53}
 
@@ -71,15 +70,12 @@ Namespace Data
             Color.FromArgb(255, 20, 180, 133)
             }
 
-        Public Shared Function CreateBitmapFromMap(nbtFile As NbtFile) As Bitmap
+        Public Shared Function CreateBitmapFromMap(colours As Byte()) As Bitmap
             Try
-                Dim colours =
-                        nbtFile.RootTag.Get (Of NbtCompound)("data").Get (Of NbtByteArray)("colors")
-
                 Dim bitmap = New Bitmap(128, 128)
 
-                For i = 0 To colours.ByteArrayValue.Count - 1
-                    Dim colour = colours.ByteArrayValue(i)
+                For i = 0 To colours.Count - 1
+                    Dim colour = colours(i)
 
                     Dim row = Math.Floor(i/128)
                     Dim column = i - (row*128)
@@ -91,6 +87,30 @@ Namespace Data
                     Dim baseColour = ColourTable(base)
                     Dim rgbColour = Color.FromArgb(baseColour.A, baseColour.R*multiplier, baseColour.G*multiplier,
                                                    baseColour.B*multiplier)
+                    bitmap.SetPixel(column, row, rgbColour)
+                Next
+
+                Return bitmap
+            Catch ex As Exception
+                Throw
+            End Try
+        End Function
+
+        Public Shared Function CreateHeightmapFromMap(colours As Byte()) As Bitmap
+            Try
+                Dim bitmap = New Bitmap(128, 128)
+
+                For i = 0 To colours.Count - 1
+                    Dim colour = colours(i)
+
+                    Dim row = Math.Floor(i/128)
+                    Dim column = i - (row*128)
+
+                    Dim variation = colour Mod 4
+
+                    Dim multiplier = VariantTable(variation)
+                    Dim rgbColour = Color.FromArgb(255, 255*multiplier, 255*multiplier,
+                                                   255*multiplier)
                     bitmap.SetPixel(column, row, rgbColour)
                 Next
 
