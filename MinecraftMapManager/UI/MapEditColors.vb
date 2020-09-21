@@ -1,4 +1,5 @@
-﻿Imports MinecraftMapManager.Data
+﻿Imports System.Drawing.Imaging
+Imports MinecraftMapManager.Data
 
 Public Class MapEditColors
     Public Dim MapFile As MapFile
@@ -16,7 +17,7 @@ Public Class MapEditColors
     Private Dim _isPainting = False
     Private Dim _currentColour As Byte
     Private Dim _currentColourRgb As Color
-
+    
     Private Sub MapEditColors_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         lsbColourBase.ItemHeight = 40
         lsbColourBase.DataSource = MapColours.ColourTable
@@ -162,18 +163,6 @@ Public Class MapEditColors
         ImageBackgroundWorker.CancelAsync()
         UpdateImage()
     End Sub
-
-    Private Function Clamp(value As Double, lower As Integer, upper As Integer) As Double
-        If value < lower Then
-            value = lower
-        End If
-
-        If value > upper Then
-            value = upper
-        End If
-
-        Return value
-    End Function
 
     Private Function GetSelectedColour() As Byte
         Return (lsbColourBase.SelectedIndex*4) + lsbColourVariant.SelectedIndex

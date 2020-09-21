@@ -78,11 +78,27 @@
     <Import Include="System.Threading.Tasks" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Colour\ColourCache.vb" />
+    <Compile Include="Colour\Conversions\ColourLAB.vb" />
+    <Compile Include="Colour\Conversions\ColourLinearRGB.vb" />
+    <Compile Include="Colour\Conversions\ColourRGB.vb" />
+    <Compile Include="Colour\Conversions\ColourXYZ.vb" />
+    <Compile Include="Colour\Conversions\IVectorable.vb" />
+    <Compile Include="Colour\Matrices.vb" />
+    <Compile Include="Colour\MatrixExtensions.vb" />
+    <Compile Include="Colour\WorkingSpace\ChromaticityCoords.vb" />
+    <Compile Include="Colour\WorkingSpace\Gamma.vb" />
+    <Compile Include="Colour\WorkingSpace\ICompanding.vb" />
+    <Compile Include="Colour\WorkingSpace\Illuminants.vb" />
+    <Compile Include="Colour\WorkingSpace\sRGBCompanding.vb" />
+    <Compile Include="Colour\WorkingSpace\WorkingSpace.vb" />
+    <Compile Include="Colour\WorkingSpace\WorkingSpaces.vb" />
     <Compile Include="Data\DataVersions.vb" />
     <Compile Include="Data\IDatFile.vb" />
     <Compile Include="Data\IdCountsFile.vb" />
     <Compile Include="Data\MapColours.vb" />
     <Compile Include="Data\MapFile.vb" />
+    <Compile Include="Data\MapImage.vb" />
     <Compile Include="Data\NbtExtensions.vb" />
     <Compile Include="Data\Util.vb" />
     <Compile Include="UI\AboutDialog.Designer.vb">
@@ -184,6 +200,5 @@
     <None Include="App.config" />
     <None Include="packages.config" />
   </ItemGroup>
-  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.VisualBasic.targets" />
 </Project>

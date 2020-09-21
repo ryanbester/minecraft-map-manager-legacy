@@ -7,5 +7,17 @@
 
             Return arr
         End Function
+
+        Public Function Clamp(value As Double, lower As Integer, upper As Integer) As Double
+            If value < lower Then
+                value = lower
+            End If
+
+            If value > upper Then
+                value = upper
+            End If
+
+            Return value
+        End Function
     End Module
 End NameSpace

@@ -9,6 +9,19 @@ Namespace UI
     Public Class EditMapDat
         Private _mapFile As MapFile
 
+        Private ReadOnly _mapImage As MapImage = New MapImage()
+        Private _previewUpdateNeeded = False
+
+        Private Sub EditMapDat_Load(sender As Object, e As EventArgs) Handles MyBase.Load
+            cmbImageInterpolation.SelectedIndex = 0
+            cmbImageDithering.SelectedIndex = 0
+            cmbImageColorDifference.SelectedIndex = 0
+            
+            If Not previewUpdateWorker.IsBusy Then
+                previewUpdateWorker.RunWorkerAsync()
+            End If
+        End Sub
+
         Private Sub btnFileBrowse_Click(sender As Object, e As EventArgs) Handles btnFileBrowse.Click
             Using openFileDialog = New OpenFileDialog()
                 openFileDialog.InitialDirectory =
@@ -41,7 +54,7 @@ Namespace UI
                 txtX.Value = _mapFile.X
                 txtZ.Value = _mapFile.Z
 
-                UpdatePreview()
+                _previewUpdateNeeded = True
 
                 EnableControls()
             Catch ex As Exception
@@ -78,7 +91,7 @@ Namespace UI
             Select Case _mapFile.Dimension
                 Case 0
                     cmbDimension.SelectedIndex = 0
-                Case - 1
+                Case -1
                     cmbCompressionType.SelectedIndex = 1
                 Case 1
                     cmbCompressionType.SelectedIndex = 2
@@ -90,7 +103,7 @@ Namespace UI
                 Case 0
                     Return 0
                 Case 1
-                    Return - 1
+                    Return -1
                 Case 2
                     Return 1
             End Select
@@ -103,8 +116,27 @@ Namespace UI
             colours = MapColours.CombineLayers(_mapFile.MapColours, colours)
 
             Dim bitmap = MapColours.CreateBitmapFromMap(colours)
+
+            If _mapImage.RawImage IsNot Nothing Then
+                If _mapImage.RenderPreview Then
+                    Dim gr = Graphics.FromImage(bitmap)
+                    Dim hatchBrush = New HatchBrush(HatchStyle.DarkUpwardDiagonal, Color.Black, Color.White)
+                    gr.DrawRectangle(New Pen(hatchBrush), _mapImage.X, _mapImage.Y, _mapImage.Width, _mapImage.Height)
+                End If
+            End If
+
             Dim upscaledBitmap = MapColours.UpscaleBitmap(bitmap, 2)
             picMapPreview.Image = upscaledBitmap
+        End Sub
+
+        Private Sub previewUpdateWorker_DoWork(sender As Object, e As System.ComponentModel.DoWorkEventArgs) _
+            Handles previewUpdateWorker.DoWork
+            While Not previewUpdateWorker.CancellationPending
+                While _previewUpdateNeeded
+                    UpdatePreview()
+                    _previewUpdateNeeded = False
+                End While
+            End While
         End Sub
 
         Private Sub btnCreateNew_Click(sender As Object, e As EventArgs) Handles btnCreateNew.Click
@@ -119,7 +151,7 @@ Namespace UI
                 cmbCompressionType.SelectedIndex = 1
                 cmbDimension.SelectedIndex = 0
 
-                UpdatePreview()
+                _previewUpdateNeeded = True
 
                 EnableControls()
                 EnableControlsForNew()
@@ -325,7 +357,106 @@ Namespace UI
             Dim editColorsDlg = New MapEditColors()
             editColorsDlg.MapFile = _mapFile
             editColorsDlg.ShowDialog()
-            UpdatePreview()
+            _previewUpdateNeeded = True
+        End Sub
+
+        Private Sub UpdateImagePreview()
+            picImagePreview.Image = _mapImage.RawImage
+        End Sub
+
+        Private Sub EnableImageControls()
+            txtImageX.Enabled = True
+            txtImageY.Enabled = True
+            txtImageWidth.Enabled = True
+            txtImageHeight.Enabled = True
+
+            cmbImageInterpolation.Enabled = True
+            cmbImageDithering.Enabled = True
+            cmbImageColorDifference.Enabled = True
+            btnImageAdvancedSettings.Enabled = True
+        End Sub
+
+        Private Sub DisableImageControls()
+            txtImageX.Enabled = False
+            txtImageY.Enabled = False
+            txtImageWidth.Enabled = False
+            txtImageHeight.Enabled = False
+
+            cmbImageInterpolation.Enabled = False
+            cmbImageDithering.Enabled = False
+            cmbImageColorDifference.Enabled = False
+            btnImageAdvancedSettings.Enabled = False
+        End Sub
+
+        Private Sub btnImageAdd_Click(sender As Object, e As EventArgs) Handles btnImageAdd.Click
+            Dim bitmap = _mapImage.AddImage()
+            If bitmap IsNot Nothing Then
+                btnImageAdd.Enabled = False
+                btnImageRemove.Enabled = True
+                btnImageApply.Enabled = True
+                EnableImageControls()
+
+                _mapImage.X = txtImageX.Value
+                _mapImage.Y = txtImageY.Value
+                _mapImage.Width = txtImageWidth.Value
+                _mapImage.Height = txtImageHeight.Value
+
+                UpdateImagePreview()
+                _previewUpdateNeeded = True
+            End If
+        End Sub
+
+        Private Sub btnImageRemove_Click(sender As Object, e As EventArgs) Handles btnImageRemove.Click
+            btnImageRemove.Enabled = False
+            btnImageAdd.Enabled = True
+            btnImageApply.Enabled = False
+            btnImageEdit.Enabled = False
+            DisableImageControls()
+
+            _mapImage.RawImage = Nothing
+            UpdateImagePreview()
+            _previewUpdateNeeded = True
+        End Sub
+
+        Private Sub txtImageX_ValueChanged(sender As Object, e As EventArgs) _
+            Handles txtImageX.ValueChanged, txtImageY.ValueChanged, txtImageWidth.ValueChanged,
+                    txtImageHeight.ValueChanged
+
+            Dim control = DirectCast(sender, NumericUpDown)
+            Select Case control.Name
+                Case "txtImageX"
+                    _mapImage.X = control.Value
+                Case "txtImageY"
+                    _mapImage.Y = control.Value
+                Case "txtImageWidth"
+                    _mapImage.Width = control.Value
+                Case "txtImageHeight"
+                    _mapImage.Height = control.Value
+            End Select
+
+            _previewUpdateNeeded = True
+        End Sub
+
+        Private Sub btnImageAdvancedSettings_Click(sender As Object, e As EventArgs) Handles btnImageAdvancedSettings.Click
+            MessageBox.Show(Me, "Colour profile, illuminant, custom illuminant and chromaticity coords", "Advanced Settings")
+        End Sub
+
+        Private Sub btnImageEdit_Click(sender As Object, e As EventArgs) Handles btnImageEdit.Click
+            EnableImageControls()
+            btnImageEdit.Enabled = False
+            btnImageApply.Enabled = True
+            btnImageRemove.Enabled = True
+        End Sub
+
+        Private Sub btnImageApply_Click(sender As Object, e As EventArgs) Handles btnImageApply.Click
+            DisableImageControls()
+            btnImageApply.Enabled = False
+            btnImageEdit.Enabled = True
+            btnImageRemove.Enabled = False
+            
+            Cursor = Cursors.WaitCursor
+            _mapImage.ProcessImage()
+            Cursor = Cursors.Default
         End Sub
     End Class
 End NameSpace

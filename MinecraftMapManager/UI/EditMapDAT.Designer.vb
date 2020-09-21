@@ -61,25 +61,27 @@
             Me.btnCreateNew = New System.Windows.Forms.Button()
             Me.getVersionWorker = New MinecraftMapManager.UI.Controls.VersionBackgroundWorker()
             Me.grpImage = New System.Windows.Forms.GroupBox()
+            Me.btnImageAdvancedSettings = New System.Windows.Forms.Button()
+            Me.cmbImageDithering = New System.Windows.Forms.ComboBox()
+            Me.lblImageDithering = New System.Windows.Forms.Label()
+            Me.cmbImageColorDifference = New System.Windows.Forms.ComboBox()
+            Me.lblImageColorDifference = New System.Windows.Forms.Label()
+            Me.cmbImageInterpolation = New System.Windows.Forms.ComboBox()
+            Me.lblImageInterpolation = New System.Windows.Forms.Label()
+            Me.txtImageHeight = New System.Windows.Forms.NumericUpDown()
+            Me.txtImageWidth = New System.Windows.Forms.NumericUpDown()
+            Me.txtImageY = New System.Windows.Forms.NumericUpDown()
+            Me.txtImageX = New System.Windows.Forms.NumericUpDown()
+            Me.lblImageHeight = New System.Windows.Forms.Label()
+            Me.lblImageWidth = New System.Windows.Forms.Label()
+            Me.lblImageY = New System.Windows.Forms.Label()
+            Me.lblImageX = New System.Windows.Forms.Label()
             Me.btnImageApply = New System.Windows.Forms.Button()
             Me.btnImageEdit = New System.Windows.Forms.Button()
             Me.btnImageRemove = New System.Windows.Forms.Button()
             Me.btnImageAdd = New System.Windows.Forms.Button()
             Me.picImagePreview = New System.Windows.Forms.PictureBox()
-            Me.lblImageX = New System.Windows.Forms.Label()
-            Me.lblImageY = New System.Windows.Forms.Label()
-            Me.lblImageWidth = New System.Windows.Forms.Label()
-            Me.lblImageHeight = New System.Windows.Forms.Label()
-            Me.txtImageX = New System.Windows.Forms.NumericUpDown()
-            Me.txtImageY = New System.Windows.Forms.NumericUpDown()
-            Me.txtImageWidth = New System.Windows.Forms.NumericUpDown()
-            Me.txtImageHeight = New System.Windows.Forms.NumericUpDown()
-            Me.lblImageInterpolation = New System.Windows.Forms.Label()
-            Me.cmbImageInterpolation = New System.Windows.Forms.ComboBox()
-            Me.lblImageColorDifference = New System.Windows.Forms.Label()
-            Me.cmbImageColorDifference = New System.Windows.Forms.ComboBox()
-            Me.cmbImageDithering = New System.Windows.Forms.ComboBox()
-            Me.lblImageDithering = New System.Windows.Forms.Label()
+            Me.previewUpdateWorker = New System.ComponentModel.BackgroundWorker()
             CType(Me.txtDataVersion, System.ComponentModel.ISupportInitialize).BeginInit()
             CType(Me.picMapPreview, System.ComponentModel.ISupportInitialize).BeginInit()
             CType(Me.txtScale, System.ComponentModel.ISupportInitialize).BeginInit()
@@ -89,11 +91,11 @@
             Me.grpFile.SuspendLayout()
             Me.grpMap.SuspendLayout()
             Me.grpImage.SuspendLayout()
-            CType(Me.picImagePreview, System.ComponentModel.ISupportInitialize).BeginInit()
-            CType(Me.txtImageX, System.ComponentModel.ISupportInitialize).BeginInit()
-            CType(Me.txtImageY, System.ComponentModel.ISupportInitialize).BeginInit()
-            CType(Me.txtImageWidth, System.ComponentModel.ISupportInitialize).BeginInit()
             CType(Me.txtImageHeight, System.ComponentModel.ISupportInitialize).BeginInit()
+            CType(Me.txtImageWidth, System.ComponentModel.ISupportInitialize).BeginInit()
+            CType(Me.txtImageY, System.ComponentModel.ISupportInitialize).BeginInit()
+            CType(Me.txtImageX, System.ComponentModel.ISupportInitialize).BeginInit()
+            CType(Me.picImagePreview, System.ComponentModel.ISupportInitialize).BeginInit()
             Me.SuspendLayout()
             '
             'lblEditMap
@@ -489,6 +491,7 @@
             '
             'grpImage
             '
+            Me.grpImage.Controls.Add(Me.btnImageAdvancedSettings)
             Me.grpImage.Controls.Add(Me.cmbImageDithering)
             Me.grpImage.Controls.Add(Me.lblImageDithering)
             Me.grpImage.Controls.Add(Me.cmbImageColorDifference)
@@ -516,6 +519,150 @@
             Me.grpImage.TabStop = False
             Me.grpImage.Text = "Image"
             '
+            'btnImageAdvancedSettings
+            '
+            Me.btnImageAdvancedSettings.Enabled = False
+            Me.btnImageAdvancedSettings.Location = New System.Drawing.Point(434, 142)
+            Me.btnImageAdvancedSettings.Name = "btnImageAdvancedSettings"
+            Me.btnImageAdvancedSettings.Size = New System.Drawing.Size(121, 23)
+            Me.btnImageAdvancedSettings.TabIndex = 19
+            Me.btnImageAdvancedSettings.Text = "Advanced Settings..."
+            Me.btnImageAdvancedSettings.UseVisualStyleBackColor = True
+            '
+            'cmbImageDithering
+            '
+            Me.cmbImageDithering.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
+            Me.cmbImageDithering.Enabled = False
+            Me.cmbImageDithering.FormattingEnabled = True
+            Me.cmbImageDithering.Items.AddRange(New Object() {"No Dithering", "Floyd-Steinberg", "Threshold", "Halftone", "Bayer", "Jarvis, Judice, and Ninke", "Stucki", "Burkes", "Sierra", "Two-row Sierra", "Sierra Lite", "Atkinson", "Gradient-based"})
+            Me.cmbImageDithering.Location = New System.Drawing.Point(433, 75)
+            Me.cmbImageDithering.Name = "cmbImageDithering"
+            Me.cmbImageDithering.Size = New System.Drawing.Size(121, 21)
+            Me.cmbImageDithering.TabIndex = 18
+            '
+            'lblImageDithering
+            '
+            Me.lblImageDithering.AutoSize = True
+            Me.lblImageDithering.Location = New System.Drawing.Point(431, 59)
+            Me.lblImageDithering.Name = "lblImageDithering"
+            Me.lblImageDithering.Size = New System.Drawing.Size(52, 13)
+            Me.lblImageDithering.TabIndex = 17
+            Me.lblImageDithering.Text = "Dithering:"
+            '
+            'cmbImageColorDifference
+            '
+            Me.cmbImageColorDifference.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
+            Me.cmbImageColorDifference.Enabled = False
+            Me.cmbImageColorDifference.FormattingEnabled = True
+            Me.cmbImageColorDifference.Items.AddRange(New Object() {"Euclidean", "CIE76", "CIE94", "CMC", "BFD", "CIEDE2000"})
+            Me.cmbImageColorDifference.Location = New System.Drawing.Point(434, 115)
+            Me.cmbImageColorDifference.Name = "cmbImageColorDifference"
+            Me.cmbImageColorDifference.Size = New System.Drawing.Size(121, 21)
+            Me.cmbImageColorDifference.TabIndex = 16
+            '
+            'lblImageColorDifference
+            '
+            Me.lblImageColorDifference.AutoSize = True
+            Me.lblImageColorDifference.Location = New System.Drawing.Point(431, 99)
+            Me.lblImageColorDifference.Name = "lblImageColorDifference"
+            Me.lblImageColorDifference.Size = New System.Drawing.Size(86, 13)
+            Me.lblImageColorDifference.TabIndex = 15
+            Me.lblImageColorDifference.Text = "Color Difference:"
+            '
+            'cmbImageInterpolation
+            '
+            Me.cmbImageInterpolation.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
+            Me.cmbImageInterpolation.Enabled = False
+            Me.cmbImageInterpolation.FormattingEnabled = True
+            Me.cmbImageInterpolation.Items.AddRange(New Object() {"Nearest Neighbour", "Bicubic", "Bilinear"})
+            Me.cmbImageInterpolation.Location = New System.Drawing.Point(433, 35)
+            Me.cmbImageInterpolation.Name = "cmbImageInterpolation"
+            Me.cmbImageInterpolation.Size = New System.Drawing.Size(121, 21)
+            Me.cmbImageInterpolation.TabIndex = 14
+            '
+            'lblImageInterpolation
+            '
+            Me.lblImageInterpolation.AutoSize = True
+            Me.lblImageInterpolation.Location = New System.Drawing.Point(430, 19)
+            Me.lblImageInterpolation.Name = "lblImageInterpolation"
+            Me.lblImageInterpolation.Size = New System.Drawing.Size(98, 13)
+            Me.lblImageInterpolation.TabIndex = 13
+            Me.lblImageInterpolation.Text = "Interpolation Mode:"
+            '
+            'txtImageHeight
+            '
+            Me.txtImageHeight.Enabled = False
+            Me.txtImageHeight.Location = New System.Drawing.Point(304, 112)
+            Me.txtImageHeight.Maximum = New Decimal(New Integer() {128, 0, 0, 0})
+            Me.txtImageHeight.Name = "txtImageHeight"
+            Me.txtImageHeight.Size = New System.Drawing.Size(120, 20)
+            Me.txtImageHeight.TabIndex = 12
+            Me.txtImageHeight.Value = New Decimal(New Integer() {128, 0, 0, 0})
+            '
+            'txtImageWidth
+            '
+            Me.txtImageWidth.Enabled = False
+            Me.txtImageWidth.Location = New System.Drawing.Point(304, 81)
+            Me.txtImageWidth.Maximum = New Decimal(New Integer() {128, 0, 0, 0})
+            Me.txtImageWidth.Name = "txtImageWidth"
+            Me.txtImageWidth.Size = New System.Drawing.Size(120, 20)
+            Me.txtImageWidth.TabIndex = 11
+            Me.txtImageWidth.Value = New Decimal(New Integer() {128, 0, 0, 0})
+            '
+            'txtImageY
+            '
+            Me.txtImageY.Enabled = False
+            Me.txtImageY.Location = New System.Drawing.Point(304, 50)
+            Me.txtImageY.Maximum = New Decimal(New Integer() {128, 0, 0, 0})
+            Me.txtImageY.Name = "txtImageY"
+            Me.txtImageY.Size = New System.Drawing.Size(120, 20)
+            Me.txtImageY.TabIndex = 10
+            '
+            'txtImageX
+            '
+            Me.txtImageX.Enabled = False
+            Me.txtImageX.Location = New System.Drawing.Point(304, 19)
+            Me.txtImageX.Maximum = New Decimal(New Integer() {128, 0, 0, 0})
+            Me.txtImageX.Name = "txtImageX"
+            Me.txtImageX.Size = New System.Drawing.Size(120, 20)
+            Me.txtImageX.TabIndex = 9
+            '
+            'lblImageHeight
+            '
+            Me.lblImageHeight.AutoSize = True
+            Me.lblImageHeight.Location = New System.Drawing.Point(257, 114)
+            Me.lblImageHeight.Name = "lblImageHeight"
+            Me.lblImageHeight.Size = New System.Drawing.Size(41, 13)
+            Me.lblImageHeight.TabIndex = 8
+            Me.lblImageHeight.Text = "Height:"
+            '
+            'lblImageWidth
+            '
+            Me.lblImageWidth.AutoSize = True
+            Me.lblImageWidth.Location = New System.Drawing.Point(257, 83)
+            Me.lblImageWidth.Name = "lblImageWidth"
+            Me.lblImageWidth.Size = New System.Drawing.Size(38, 13)
+            Me.lblImageWidth.TabIndex = 7
+            Me.lblImageWidth.Text = "Width:"
+            '
+            'lblImageY
+            '
+            Me.lblImageY.AutoSize = True
+            Me.lblImageY.Location = New System.Drawing.Point(256, 52)
+            Me.lblImageY.Name = "lblImageY"
+            Me.lblImageY.Size = New System.Drawing.Size(17, 13)
+            Me.lblImageY.TabIndex = 6
+            Me.lblImageY.Text = "Y:"
+            '
+            'lblImageX
+            '
+            Me.lblImageX.AutoSize = True
+            Me.lblImageX.Location = New System.Drawing.Point(256, 21)
+            Me.lblImageX.Name = "lblImageX"
+            Me.lblImageX.Size = New System.Drawing.Size(17, 13)
+            Me.lblImageX.TabIndex = 5
+            Me.lblImageX.Text = "X:"
+            '
             'btnImageApply
             '
             Me.btnImageApply.Enabled = False
@@ -528,6 +675,7 @@
             '
             'btnImageEdit
             '
+            Me.btnImageEdit.Enabled = False
             Me.btnImageEdit.Location = New System.Drawing.Point(581, 19)
             Me.btnImageEdit.Name = "btnImageEdit"
             Me.btnImageEdit.Size = New System.Drawing.Size(75, 23)
@@ -559,133 +707,13 @@
             Me.picImagePreview.Location = New System.Drawing.Point(107, 19)
             Me.picImagePreview.Name = "picImagePreview"
             Me.picImagePreview.Size = New System.Drawing.Size(142, 142)
+            Me.picImagePreview.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom
             Me.picImagePreview.TabIndex = 0
             Me.picImagePreview.TabStop = False
             '
-            'lblImageX
+            'previewUpdateWorker
             '
-            Me.lblImageX.AutoSize = True
-            Me.lblImageX.Location = New System.Drawing.Point(256, 21)
-            Me.lblImageX.Name = "lblImageX"
-            Me.lblImageX.Size = New System.Drawing.Size(17, 13)
-            Me.lblImageX.TabIndex = 5
-            Me.lblImageX.Text = "X:"
-            '
-            'lblImageY
-            '
-            Me.lblImageY.AutoSize = True
-            Me.lblImageY.Location = New System.Drawing.Point(256, 52)
-            Me.lblImageY.Name = "lblImageY"
-            Me.lblImageY.Size = New System.Drawing.Size(17, 13)
-            Me.lblImageY.TabIndex = 6
-            Me.lblImageY.Text = "Y:"
-            '
-            'lblImageWidth
-            '
-            Me.lblImageWidth.AutoSize = True
-            Me.lblImageWidth.Location = New System.Drawing.Point(257, 83)
-            Me.lblImageWidth.Name = "lblImageWidth"
-            Me.lblImageWidth.Size = New System.Drawing.Size(38, 13)
-            Me.lblImageWidth.TabIndex = 7
-            Me.lblImageWidth.Text = "Width:"
-            '
-            'lblImageHeight
-            '
-            Me.lblImageHeight.AutoSize = True
-            Me.lblImageHeight.Location = New System.Drawing.Point(257, 114)
-            Me.lblImageHeight.Name = "lblImageHeight"
-            Me.lblImageHeight.Size = New System.Drawing.Size(41, 13)
-            Me.lblImageHeight.TabIndex = 8
-            Me.lblImageHeight.Text = "Height:"
-            '
-            'txtImageX
-            '
-            Me.txtImageX.Location = New System.Drawing.Point(304, 19)
-            Me.txtImageX.Maximum = New Decimal(New Integer() {128, 0, 0, 0})
-            Me.txtImageX.Name = "txtImageX"
-            Me.txtImageX.Size = New System.Drawing.Size(120, 20)
-            Me.txtImageX.TabIndex = 9
-            '
-            'txtImageY
-            '
-            Me.txtImageY.Location = New System.Drawing.Point(304, 50)
-            Me.txtImageY.Maximum = New Decimal(New Integer() {128, 0, 0, 0})
-            Me.txtImageY.Name = "txtImageY"
-            Me.txtImageY.Size = New System.Drawing.Size(120, 20)
-            Me.txtImageY.TabIndex = 10
-            '
-            'txtImageWidth
-            '
-            Me.txtImageWidth.Location = New System.Drawing.Point(304, 81)
-            Me.txtImageWidth.Maximum = New Decimal(New Integer() {128, 0, 0, 0})
-            Me.txtImageWidth.Name = "txtImageWidth"
-            Me.txtImageWidth.Size = New System.Drawing.Size(120, 20)
-            Me.txtImageWidth.TabIndex = 11
-            '
-            'txtImageHeight
-            '
-            Me.txtImageHeight.Location = New System.Drawing.Point(304, 112)
-            Me.txtImageHeight.Maximum = New Decimal(New Integer() {128, 0, 0, 0})
-            Me.txtImageHeight.Name = "txtImageHeight"
-            Me.txtImageHeight.Size = New System.Drawing.Size(120, 20)
-            Me.txtImageHeight.TabIndex = 12
-            '
-            'lblImageInterpolation
-            '
-            Me.lblImageInterpolation.AutoSize = True
-            Me.lblImageInterpolation.Location = New System.Drawing.Point(430, 19)
-            Me.lblImageInterpolation.Name = "lblImageInterpolation"
-            Me.lblImageInterpolation.Size = New System.Drawing.Size(98, 13)
-            Me.lblImageInterpolation.TabIndex = 13
-            Me.lblImageInterpolation.Text = "Interpolation Mode:"
-            '
-            'cmbImageInterpolation
-            '
-            Me.cmbImageInterpolation.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
-            Me.cmbImageInterpolation.FormattingEnabled = True
-            Me.cmbImageInterpolation.Items.AddRange(New Object() {"Nearest Neighbour", "Bicubic", "Bilinear"})
-            Me.cmbImageInterpolation.Location = New System.Drawing.Point(433, 35)
-            Me.cmbImageInterpolation.Name = "cmbImageInterpolation"
-            Me.cmbImageInterpolation.Size = New System.Drawing.Size(121, 21)
-            Me.cmbImageInterpolation.TabIndex = 14
-            '
-            'lblImageColorDifference
-            '
-            Me.lblImageColorDifference.AutoSize = True
-            Me.lblImageColorDifference.Location = New System.Drawing.Point(431, 99)
-            Me.lblImageColorDifference.Name = "lblImageColorDifference"
-            Me.lblImageColorDifference.Size = New System.Drawing.Size(86, 13)
-            Me.lblImageColorDifference.TabIndex = 15
-            Me.lblImageColorDifference.Text = "Color Difference:"
-            '
-            'cmbImageColorDifference
-            '
-            Me.cmbImageColorDifference.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
-            Me.cmbImageColorDifference.FormattingEnabled = True
-            Me.cmbImageColorDifference.Items.AddRange(New Object() {"Euclidean", "CIE76", "CIE94", "CMC", "BFD", "CIEDE2000"})
-            Me.cmbImageColorDifference.Location = New System.Drawing.Point(434, 115)
-            Me.cmbImageColorDifference.Name = "cmbImageColorDifference"
-            Me.cmbImageColorDifference.Size = New System.Drawing.Size(121, 21)
-            Me.cmbImageColorDifference.TabIndex = 16
-            '
-            'cmbImageDithering
-            '
-            Me.cmbImageDithering.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
-            Me.cmbImageDithering.FormattingEnabled = True
-            Me.cmbImageDithering.Items.AddRange(New Object() {"No Dithering", "Floyd-Steinberg", "Threshold", "Halftone", "Bayer", "Jarvis, Judice, and Ninke", "Stucki", "Burkes", "Sierra", "Two-row Sierra", "Sierra Lite", "Atkinson", "Gradient-based"})
-            Me.cmbImageDithering.Location = New System.Drawing.Point(433, 75)
-            Me.cmbImageDithering.Name = "cmbImageDithering"
-            Me.cmbImageDithering.Size = New System.Drawing.Size(121, 21)
-            Me.cmbImageDithering.TabIndex = 18
-            '
-            'lblImageDithering
-            '
-            Me.lblImageDithering.AutoSize = True
-            Me.lblImageDithering.Location = New System.Drawing.Point(431, 59)
-            Me.lblImageDithering.Name = "lblImageDithering"
-            Me.lblImageDithering.Size = New System.Drawing.Size(52, 13)
-            Me.lblImageDithering.TabIndex = 17
-            Me.lblImageDithering.Text = "Dithering:"
+            Me.previewUpdateWorker.WorkerSupportsCancellation = True
             '
             'EditMapDat
             '
@@ -726,11 +754,11 @@
             Me.grpMap.PerformLayout()
             Me.grpImage.ResumeLayout(False)
             Me.grpImage.PerformLayout()
-            CType(Me.picImagePreview, System.ComponentModel.ISupportInitialize).EndInit()
-            CType(Me.txtImageX, System.ComponentModel.ISupportInitialize).EndInit()
-            CType(Me.txtImageY, System.ComponentModel.ISupportInitialize).EndInit()
-            CType(Me.txtImageWidth, System.ComponentModel.ISupportInitialize).EndInit()
             CType(Me.txtImageHeight, System.ComponentModel.ISupportInitialize).EndInit()
+            CType(Me.txtImageWidth, System.ComponentModel.ISupportInitialize).EndInit()
+            CType(Me.txtImageY, System.ComponentModel.ISupportInitialize).EndInit()
+            CType(Me.txtImageX, System.ComponentModel.ISupportInitialize).EndInit()
+            CType(Me.picImagePreview, System.ComponentModel.ISupportInitialize).EndInit()
             Me.ResumeLayout(False)
             Me.PerformLayout()
 
@@ -793,5 +821,7 @@
         Friend WithEvents lblImageColorDifference As Label
         Friend WithEvents cmbImageDithering As ComboBox
         Friend WithEvents lblImageDithering As Label
+        Friend WithEvents previewUpdateWorker As System.ComponentModel.BackgroundWorker
+        Friend WithEvents btnImageAdvancedSettings As Button
     End Class
 End NameSpace

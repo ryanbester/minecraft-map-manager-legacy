@@ -1,7 +1,9 @@
 ﻿Imports System.Windows.Forms.VisualStyles
+Imports MinecraftMapManager.Colour
+Imports MinecraftMapManager.Colour.Conversions
+Imports MinecraftMapManager.Colour.WorkingSpace
 
 Namespace UI
-
     Public Class MainForm
         Private Sub btnOpenMapDAT_Click(sender As Object, e As EventArgs) Handles btnOpenMapDAT.Click
             Dim editMapDlg = New EditMapDAT()
@@ -9,7 +11,6 @@ Namespace UI
         End Sub
 
         Private Sub btnOpenSave_Click(sender As Object, e As EventArgs) Handles btnOpenSave.Click
-
         End Sub
 
         Private Sub btnCreateMapDAT_Click(sender As Object, e As EventArgs) Handles btnCreateMapDAT.Click
@@ -24,7 +25,6 @@ Namespace UI
         End Sub
 
         Private Sub btnHelp_Click(sender As Object, e As EventArgs) Handles btnHelp.Click
-
         End Sub
 
         Private Sub btnAbout_Click(sender As Object, e As EventArgs) Handles btnAbout.Click
