@@ -3,6 +3,7 @@ Imports System.Drawing.Drawing2D
 Imports System.Drawing.Imaging
 Imports System.IO
 Imports fNbt
+Imports MinecraftMapManager.Colour.WorkingSpace
 Imports MinecraftMapManager.Data
 
 Namespace UI
@@ -16,7 +17,7 @@ Namespace UI
             cmbImageInterpolation.SelectedIndex = 0
             cmbImageDithering.SelectedIndex = 0
             cmbImageColorDifference.SelectedIndex = 0
-            
+
             If Not previewUpdateWorker.IsBusy Then
                 previewUpdateWorker.RunWorkerAsync()
             End If
@@ -91,7 +92,7 @@ Namespace UI
             Select Case _mapFile.Dimension
                 Case 0
                     cmbDimension.SelectedIndex = 0
-                Case -1
+                Case - 1
                     cmbCompressionType.SelectedIndex = 1
                 Case 1
                     cmbCompressionType.SelectedIndex = 2
@@ -103,7 +104,7 @@ Namespace UI
                 Case 0
                     Return 0
                 Case 1
-                    Return -1
+                    Return - 1
                 Case 2
                     Return 1
             End Select
@@ -112,21 +113,24 @@ Namespace UI
         End Function
 
         Private Sub UpdatePreview()
-            Dim colours = MapColours.CombineLayers(_mapFile.MapColoursImage, _mapFile.MapColoursManual)
-            colours = MapColours.CombineLayers(_mapFile.MapColours, colours)
+            If _mapFile IsNot Nothing Then
+                Dim colours = MapColours.CombineLayers(_mapFile.MapColoursImage, _mapFile.MapColoursManual)
+                colours = MapColours.CombineLayers(_mapFile.MapColours, colours)
 
-            Dim bitmap = MapColours.CreateBitmapFromMap(colours)
+                Dim bitmap = MapColours.CreateBitmapFromMap(colours)
 
-            If _mapImage.RawImage IsNot Nothing Then
-                If _mapImage.RenderPreview Then
-                    Dim gr = Graphics.FromImage(bitmap)
-                    Dim hatchBrush = New HatchBrush(HatchStyle.DarkUpwardDiagonal, Color.Black, Color.White)
-                    gr.DrawRectangle(New Pen(hatchBrush), _mapImage.X, _mapImage.Y, _mapImage.Width, _mapImage.Height)
+                If _mapImage.RawImage IsNot Nothing Then
+                    If _mapImage.RenderPreview Then
+                        Dim gr = Graphics.FromImage(bitmap)
+                        Dim hatchBrush = New HatchBrush(HatchStyle.DarkUpwardDiagonal, Color.Black, Color.White)
+                        gr.DrawRectangle(New Pen(hatchBrush), _mapImage.X, _mapImage.Y, _mapImage.Width,
+                                         _mapImage.Height)
+                    End If
                 End If
-            End If
 
-            Dim upscaledBitmap = MapColours.UpscaleBitmap(bitmap, 2)
-            picMapPreview.Image = upscaledBitmap
+                Dim upscaledBitmap = MapColours.UpscaleBitmap(bitmap, 2)
+                picMapPreview.Image = upscaledBitmap
+            End If
         End Sub
 
         Private Sub previewUpdateWorker_DoWork(sender As Object, e As System.ComponentModel.DoWorkEventArgs) _
@@ -437,11 +441,16 @@ Namespace UI
             _previewUpdateNeeded = True
         End Sub
 
-        Private Sub btnImageAdvancedSettings_Click(sender As Object, e As EventArgs) Handles btnImageAdvancedSettings.Click
-            MessageBox.Show(Me, "Colour profile, illuminant, custom illuminant and chromaticity coords", "Advanced Settings")
+        Private Sub btnImageAdvancedSettings_Click(sender As Object, e As EventArgs) _
+            Handles btnImageAdvancedSettings.Click
+            MessageBox.Show(Me, "Colour profile, illuminant, custom illuminant and chromaticity coords",
+                            "Advanced Settings")
         End Sub
 
         Private Sub btnImageEdit_Click(sender As Object, e As EventArgs) Handles btnImageEdit.Click
+            _mapImage.RenderPreview = True
+            _previewUpdateNeeded = True
+
             EnableImageControls()
             btnImageEdit.Enabled = False
             btnImageApply.Enabled = True
@@ -453,10 +462,45 @@ Namespace UI
             btnImageApply.Enabled = False
             btnImageEdit.Enabled = True
             btnImageRemove.Enabled = False
-            
-            Cursor = Cursors.WaitCursor
-            _mapImage.ProcessImage()
-            Cursor = Cursors.Default
+
+            Dim interpolation = CType(cmbImageInterpolation.SelectedIndex, MapImageInterpolation)
+            Dim colourDifference = CType(cmbImageColorDifference.SelectedIndex, MapImageColourDifference)
+            Dim dithering = CType(cmbImageDithering.SelectedIndex, MapImageDithering)
+            _mapImage.ProcessSettings = New MapImageSettings(WorkingSpaces.sRGB, interpolation, colourDifference,
+                                                             dithering)
+
+            btnImageEdit.Enabled = False
+            If Not processImageWorker.IsBusy Then
+                processImageWorker.RunWorkerAsync()
+            End If
+        End Sub
+
+        Private Sub processImageWorker_DoWork(sender As Object, e As System.ComponentModel.DoWorkEventArgs) _
+            Handles processImageWorker.DoWork
+            If _mapImage.ProcessImage(sender) Is Nothing Then
+                MessageBox.Show(Me, "Error prcessing image", "Minecraft Map Manager", MessageBoxButtons.OK,
+                                MessageBoxIcon.Error)
+                processImageWorker.CancelAsync()
+            End If
+            _mapImage.ConvertToLayer(_mapFile.MapColoursImage, sender)
+        End Sub
+
+        Private Sub processImageWorker_ProgressChanged(sender As Object,
+                                                       e As System.ComponentModel.ProgressChangedEventArgs) _
+            Handles processImageWorker.ProgressChanged
+
+            lblProgress.Text = e.UserState
+            lblProgress.Refresh()
+            barProgress.Value = e.ProgressPercentage
+        End Sub
+
+        Private Sub processImageWorker_RunWorkerCompleted(sender As Object,
+                                                          e As System.ComponentModel.RunWorkerCompletedEventArgs) _
+            Handles processImageWorker.RunWorkerCompleted
+            _previewUpdateNeeded = True
+            barProgress.Value = 0
+            lblProgress.Text = ""
+            btnImageEdit.Enabled = True
         End Sub
     End Class
 End NameSpace

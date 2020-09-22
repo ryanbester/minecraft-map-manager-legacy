@@ -3,7 +3,7 @@ Imports MinecraftMapManager.Data
 
 Namespace Colour.Conversions
     Public Structure ColourLAB
-        Implements IVectorable
+        Implements IVectorable, IColour
 
         Public ReadOnly Property L As Double
         Public ReadOnly Property A As Double
@@ -48,6 +48,14 @@ Namespace Colour.Conversions
 
         Public Overrides Function ToString() As String
             Return L.ToString + ", " + A.ToString() + ", " + B.ToString()
+        End Function
+
+        Public Function ToColor(workingSpace As WorkingSpace.WorkingSpace) As Color Implements IColour.ToColor
+            Return ToRGB(workingSpace).ToColor()
+        End Function
+
+        Public Function GetColourType() As String Implements IColour.GetColourType
+            Return "LAB"
         End Function
     End Structure
 End NameSpace

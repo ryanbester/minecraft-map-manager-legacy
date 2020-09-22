@@ -83,7 +83,10 @@
     <Compile Include="Colour\Conversions\ColourLinearRGB.vb" />
     <Compile Include="Colour\Conversions\ColourRGB.vb" />
     <Compile Include="Colour\Conversions\ColourXYZ.vb" />
+    <Compile Include="Colour\Conversions\IColour.vb" />
     <Compile Include="Colour\Conversions\IVectorable.vb" />
+    <Compile Include="Colour\Difference\Euclidean.vb" />
+    <Compile Include="Colour\Difference\IColourDifference.vb" />
     <Compile Include="Colour\Matrices.vb" />
     <Compile Include="Colour\MatrixExtensions.vb" />
     <Compile Include="Colour\WorkingSpace\ChromaticityCoords.vb" />
@@ -99,6 +102,7 @@
     <Compile Include="Data\MapColours.vb" />
     <Compile Include="Data\MapFile.vb" />
     <Compile Include="Data\MapImage.vb" />
+    <Compile Include="Data\MapImageSettings.vb" />
     <Compile Include="Data\NbtExtensions.vb" />
     <Compile Include="Data\Util.vb" />
     <Compile Include="UI\AboutDialog.Designer.vb">

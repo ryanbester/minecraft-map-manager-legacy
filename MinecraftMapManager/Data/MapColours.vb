@@ -2,12 +2,13 @@
 Imports System.Drawing.Imaging
 Imports System.IO
 Imports fNbt
+Imports MinecraftMapManager.Colour.Conversions
 
 Namespace Data
     Public Class MapColours
-        Public Shared ReadOnly Dim VariantTable = New Double(3) {0.71, 0.86, 1.0, 0.53}
+        Public Shared ReadOnly VariantTable = New Double(3) {0.71, 0.86, 1.0, 0.53}
 
-        Public Shared ReadOnly Dim ColourTable = New List(Of Color) From
+        Public Shared ReadOnly ColourTable = New List(Of Color) From
             {
             Color.FromArgb(0, 255, 255, 255),
             Color.FromArgb(255, 127, 178, 56),
@@ -70,7 +71,7 @@ Namespace Data
             Color.FromArgb(255, 20, 180, 133)
             }
 
-        Public Shared ReadOnly Dim ColourNames = New List(Of String) From
+        Public Shared ReadOnly ColourNames = New List(Of String) From
             {
             "0 NONE", "1 GRASS", "2 SAND", "3 WOOL", "4 FIRE", "5 ICE", "6 METAL", "7 PLANT", "8 SNOW", "9 CLAY",
             "10 DIRT", "11 STONE", "12 WATER", "13 WOOD", "14 QUARTZ", "15 COLOR_ORANGE", "16 COLOR_MAGENTA",
@@ -92,8 +93,8 @@ Namespace Data
                 For i = 0 To colours.Count - 1
                     Dim colour = colours(i)
 
-                    Dim row = Math.Floor(i/128)
-                    Dim column = i - (row*128)
+                    Dim row = Math.Floor(i / 128)
+                    Dim column = i - (row * 128)
 
                     Dim rgbColour = GetRgbColour(colour)
                     bitmap.SetPixel(column, row, rgbColour)
@@ -112,14 +113,14 @@ Namespace Data
                 For i = 0 To colours.Count - 1
                     Dim colour = colours(i)
 
-                    Dim row = Math.Floor(i/128)
-                    Dim column = i - (row*128)
+                    Dim row = Math.Floor(i / 128)
+                    Dim column = i - (row * 128)
 
                     Dim variation = colour Mod 4
 
                     Dim multiplier = VariantTable(variation)
-                    Dim rgbColour = Color.FromArgb(255, 255*multiplier, 255*multiplier,
-                                                   255*multiplier)
+                    Dim rgbColour = Color.FromArgb(255, 255 * multiplier, 255 * multiplier,
+                                                   255 * multiplier)
                     bitmap.SetPixel(column, row, rgbColour)
                 Next
 
@@ -133,26 +134,58 @@ Namespace Data
             Dim upscaledBitmap = New Bitmap(512, 512)
             Dim gr = Graphics.FromImage(upscaledBitmap)
             gr.InterpolationMode = InterpolationMode.NearestNeighbor
-            gr.DrawImage(bitmap, 0, 0, CInt(bitmap.Width*scale), CInt(bitmap.Height*scale))
+            gr.DrawImage(bitmap, 0, 0, CInt(bitmap.Width * scale), CInt(bitmap.Height * scale))
             Return upscaledBitmap
         End Function
 
         Public Shared Function GetRgbColour(colour As Byte)
-            Dim base = Math.Floor(colour/4)
+            Dim base = Math.Floor(colour / 4)
             Dim variation = colour Mod 4
 
             Dim multiplier = VariantTable(variation)
             Dim baseColour = ColourTable(base)
-            Dim rgbColour = Color.FromArgb(baseColour.A, baseColour.R*multiplier, baseColour.G*multiplier,
-                                           baseColour.B*multiplier)
+            Dim rgbColour = Color.FromArgb(baseColour.A, baseColour.R * multiplier, baseColour.G * multiplier,
+                                           baseColour.B * multiplier)
             Return rgbColour
+        End Function
+
+        Public Shared Function GetMapColour(colour As ColourRGB) As Byte
+            Dim color = colour.ToColor()
+
+            Dim base = 0, colorVariant = 0
+            For i = 0 To VariantTable.Length - 1
+                Dim multiplier = VariantTable(i)
+
+                Dim R = color.R / multiplier
+                Dim G = color.G / multiplier
+                Dim B = color.B / multiplier
+
+                If (R > 255) Or (G > 255) Or (B > 255) Then
+                    Continue For
+                End If
+
+                If (R < 0) Or (G < 0) Or (B < 0) Then
+                    Continue For
+                End If
+
+                Dim baseColor = Color.FromArgb(color.A, color.R / multiplier, color.G / multiplier,
+                                           color.B / multiplier)
+                For j = 0 To ColourTable.Count - 1
+                    If ColourTable(j).Equals(baseColor) Then
+                        base = j
+                        colorVariant = i
+                    End If
+                Next
+            Next
+
+            Return base * 4 + colorVariant
         End Function
 
         Public Shared Function CombineLayers(bottom As Byte(), top As Byte()) As Byte()
             Dim newLayer = bottom.Clone()
 
             For i = 0 To top.Length - 1
-                If top(i) < 255
+                If top(i) < 255 Then
                     newLayer(i) = top(i)
                 End If
             Next
@@ -161,11 +194,11 @@ Namespace Data
         End Function
 
         Public Shared Sub SetPixel(ByRef layer As Byte(), x As Integer, y As Integer, colour As Byte)
-            Dim pos = (y*128) + x
+            Dim pos = (y * 128) + x
 
-            If pos > - 1 And pos < layer.Length
+            If pos > -1 And pos < layer.Length Then
                 layer(pos) = colour
             End If
         End Sub
     End Class
-End NameSpace
+End Namespace

@@ -59,7 +59,6 @@
             Me.grpMap = New System.Windows.Forms.GroupBox()
             Me.lblCenter = New System.Windows.Forms.Label()
             Me.btnCreateNew = New System.Windows.Forms.Button()
-            Me.getVersionWorker = New MinecraftMapManager.UI.Controls.VersionBackgroundWorker()
             Me.grpImage = New System.Windows.Forms.GroupBox()
             Me.btnImageAdvancedSettings = New System.Windows.Forms.Button()
             Me.cmbImageDithering = New System.Windows.Forms.ComboBox()
@@ -82,6 +81,10 @@
             Me.btnImageAdd = New System.Windows.Forms.Button()
             Me.picImagePreview = New System.Windows.Forms.PictureBox()
             Me.previewUpdateWorker = New System.ComponentModel.BackgroundWorker()
+            Me.barProgress = New System.Windows.Forms.ProgressBar()
+            Me.lblProgress = New System.Windows.Forms.Label()
+            Me.getVersionWorker = New MinecraftMapManager.UI.Controls.VersionBackgroundWorker()
+            Me.processImageWorker = New System.ComponentModel.BackgroundWorker()
             CType(Me.txtDataVersion, System.ComponentModel.ISupportInitialize).BeginInit()
             CType(Me.picMapPreview, System.ComponentModel.ISupportInitialize).BeginInit()
             CType(Me.txtScale, System.ComponentModel.ISupportInitialize).BeginInit()
@@ -484,11 +487,6 @@
             Me.btnCreateNew.Text = "Create New"
             Me.btnCreateNew.UseVisualStyleBackColor = True
             '
-            'getVersionWorker
-            '
-            Me.getVersionWorker.DataVersionControl = Me.txtDataVersion
-            Me.getVersionWorker.VersionLabel = Me.lblDataVersionName
-            '
             'grpImage
             '
             Me.grpImage.Controls.Add(Me.btnImageAdvancedSettings)
@@ -535,7 +533,7 @@
             Me.cmbImageDithering.Enabled = False
             Me.cmbImageDithering.FormattingEnabled = True
             Me.cmbImageDithering.Items.AddRange(New Object() {"No Dithering", "Floyd-Steinberg", "Threshold", "Halftone", "Bayer", "Jarvis, Judice, and Ninke", "Stucki", "Burkes", "Sierra", "Two-row Sierra", "Sierra Lite", "Atkinson", "Gradient-based"})
-            Me.cmbImageDithering.Location = New System.Drawing.Point(433, 75)
+            Me.cmbImageDithering.Location = New System.Drawing.Point(434, 115)
             Me.cmbImageDithering.Name = "cmbImageDithering"
             Me.cmbImageDithering.Size = New System.Drawing.Size(121, 21)
             Me.cmbImageDithering.TabIndex = 18
@@ -543,7 +541,7 @@
             'lblImageDithering
             '
             Me.lblImageDithering.AutoSize = True
-            Me.lblImageDithering.Location = New System.Drawing.Point(431, 59)
+            Me.lblImageDithering.Location = New System.Drawing.Point(432, 99)
             Me.lblImageDithering.Name = "lblImageDithering"
             Me.lblImageDithering.Size = New System.Drawing.Size(52, 13)
             Me.lblImageDithering.TabIndex = 17
@@ -555,7 +553,7 @@
             Me.cmbImageColorDifference.Enabled = False
             Me.cmbImageColorDifference.FormattingEnabled = True
             Me.cmbImageColorDifference.Items.AddRange(New Object() {"Euclidean", "CIE76", "CIE94", "CMC", "BFD", "CIEDE2000"})
-            Me.cmbImageColorDifference.Location = New System.Drawing.Point(434, 115)
+            Me.cmbImageColorDifference.Location = New System.Drawing.Point(434, 75)
             Me.cmbImageColorDifference.Name = "cmbImageColorDifference"
             Me.cmbImageColorDifference.Size = New System.Drawing.Size(121, 21)
             Me.cmbImageColorDifference.TabIndex = 16
@@ -563,7 +561,7 @@
             'lblImageColorDifference
             '
             Me.lblImageColorDifference.AutoSize = True
-            Me.lblImageColorDifference.Location = New System.Drawing.Point(431, 99)
+            Me.lblImageColorDifference.Location = New System.Drawing.Point(431, 59)
             Me.lblImageColorDifference.Name = "lblImageColorDifference"
             Me.lblImageColorDifference.Size = New System.Drawing.Size(86, 13)
             Me.lblImageColorDifference.TabIndex = 15
@@ -715,11 +713,38 @@
             '
             Me.previewUpdateWorker.WorkerSupportsCancellation = True
             '
+            'barProgress
+            '
+            Me.barProgress.Location = New System.Drawing.Point(17, 630)
+            Me.barProgress.Name = "barProgress"
+            Me.barProgress.Size = New System.Drawing.Size(169, 23)
+            Me.barProgress.Step = 1
+            Me.barProgress.TabIndex = 41
+            '
+            'lblProgress
+            '
+            Me.lblProgress.AutoSize = True
+            Me.lblProgress.Location = New System.Drawing.Point(192, 635)
+            Me.lblProgress.Name = "lblProgress"
+            Me.lblProgress.Size = New System.Drawing.Size(0, 13)
+            Me.lblProgress.TabIndex = 42
+            '
+            'getVersionWorker
+            '
+            Me.getVersionWorker.DataVersionControl = Me.txtDataVersion
+            Me.getVersionWorker.VersionLabel = Me.lblDataVersionName
+            '
+            'processImageWorker
+            '
+            Me.processImageWorker.WorkerReportsProgress = True
+            '
             'EditMapDat
             '
             Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
             Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
             Me.ClientSize = New System.Drawing.Size(697, 665)
+            Me.Controls.Add(Me.lblProgress)
+            Me.Controls.Add(Me.barProgress)
             Me.Controls.Add(Me.grpImage)
             Me.Controls.Add(Me.btnCreateNew)
             Me.Controls.Add(Me.btnSaveAs)
@@ -823,5 +848,8 @@
         Friend WithEvents lblImageDithering As Label
         Friend WithEvents previewUpdateWorker As System.ComponentModel.BackgroundWorker
         Friend WithEvents btnImageAdvancedSettings As Button
+        Friend WithEvents barProgress As ProgressBar
+        Friend WithEvents lblProgress As Label
+        Friend WithEvents processImageWorker As System.ComponentModel.BackgroundWorker
     End Class
 End NameSpace

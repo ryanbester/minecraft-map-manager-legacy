@@ -2,7 +2,7 @@
 
 Namespace Colour.Conversions
     Public Structure ColourXYZ
-        Implements IVectorable
+        Implements IVectorable, IColour
 
         Public ReadOnly Property X As Double
         Public ReadOnly Property Y As Double
@@ -50,6 +50,14 @@ Namespace Colour.Conversions
 
         Public Overrides Function ToString() As String
             Return X.ToString + ", " + Y.ToString() + ", " + Z.ToString()
+        End Function
+
+        Public Function ToColor(workingSpace As WorkingSpace.WorkingSpace) As Color Implements IColour.ToColor
+            Return ToRGB(workingSpace).ToColor()
+        End Function
+
+        Public Function GetColourType() As String Implements IColour.GetColourType
+            Return "XYZ"
         End Function
     End Structure
 End NameSpace
