@@ -86,6 +86,8 @@ Namespace Data
             "56 WARPED_STEM", "57 WARPED_HYPHAE", "58 WARPED_WART_BLOCK"
             }
 
+        Private Shared ReadOnly Dim ColourCache As Dictionary(Of ColourRGB, Byte) = New Dictionary(Of ColourRGB, Byte)
+
         Public Shared Function CreateBitmapFromMap(colours As Byte()) As Bitmap
             Try
                 Dim bitmap = New Bitmap(128, 128)
@@ -93,8 +95,8 @@ Namespace Data
                 For i = 0 To colours.Count - 1
                     Dim colour = colours(i)
 
-                    Dim row = Math.Floor(i / 128)
-                    Dim column = i - (row * 128)
+                    Dim row = Math.Floor(i/128)
+                    Dim column = i - (row*128)
 
                     Dim rgbColour = GetRgbColour(colour)
                     bitmap.SetPixel(column, row, rgbColour)
@@ -113,14 +115,14 @@ Namespace Data
                 For i = 0 To colours.Count - 1
                     Dim colour = colours(i)
 
-                    Dim row = Math.Floor(i / 128)
-                    Dim column = i - (row * 128)
+                    Dim row = Math.Floor(i/128)
+                    Dim column = i - (row*128)
 
                     Dim variation = colour Mod 4
 
                     Dim multiplier = VariantTable(variation)
-                    Dim rgbColour = Color.FromArgb(255, 255 * multiplier, 255 * multiplier,
-                                                   255 * multiplier)
+                    Dim rgbColour = Color.FromArgb(255, 255*multiplier, 255*multiplier,
+                                                   255*multiplier)
                     bitmap.SetPixel(column, row, rgbColour)
                 Next
 
@@ -134,31 +136,36 @@ Namespace Data
             Dim upscaledBitmap = New Bitmap(512, 512)
             Dim gr = Graphics.FromImage(upscaledBitmap)
             gr.InterpolationMode = InterpolationMode.NearestNeighbor
-            gr.DrawImage(bitmap, 0, 0, CInt(bitmap.Width * scale), CInt(bitmap.Height * scale))
+            gr.DrawImage(bitmap, 0, 0, CInt(bitmap.Width*scale), CInt(bitmap.Height*scale))
             Return upscaledBitmap
         End Function
 
         Public Shared Function GetRgbColour(colour As Byte)
-            Dim base = Math.Floor(colour / 4)
+            Dim base = Math.Floor(colour/4)
             Dim variation = colour Mod 4
 
             Dim multiplier = VariantTable(variation)
             Dim baseColour = ColourTable(base)
-            Dim rgbColour = Color.FromArgb(baseColour.A, baseColour.R * multiplier, baseColour.G * multiplier,
-                                           baseColour.B * multiplier)
+            Dim rgbColour = Color.FromArgb(baseColour.A, baseColour.R*multiplier, baseColour.G*multiplier,
+                                           baseColour.B*multiplier)
             Return rgbColour
         End Function
 
         Public Shared Function GetMapColour(colour As ColourRGB) As Byte
+            Dim byteColour As Byte? = CacheGetValue(colour)
+            If byteColour IsNot Nothing Then
+                Return byteColour
+            End If
+
             Dim color = colour.ToColor()
 
             Dim base = 0, colorVariant = 0
             For i = 0 To VariantTable.Length - 1
                 Dim multiplier = VariantTable(i)
 
-                Dim R = color.R / multiplier
-                Dim G = color.G / multiplier
-                Dim B = color.B / multiplier
+                Dim R = color.R/multiplier
+                Dim G = color.G/multiplier
+                Dim B = color.B/multiplier
 
                 If (R > 255) Or (G > 255) Or (B > 255) Then
                     Continue For
@@ -168,9 +175,13 @@ Namespace Data
                     Continue For
                 End If
 
-                Dim baseColor = Color.FromArgb(color.A, color.R / multiplier, color.G / multiplier,
-                                           color.B / multiplier)
+                Dim baseColor = Color.FromArgb(color.A, color.R/multiplier, color.G/multiplier,
+                                               color.B/multiplier)
                 For j = 0 To ColourTable.Count - 1
+                    If ColourTable(j).A = 0
+                        ' Do not allow transparency
+                        Continue For
+                    End If
                     If ColourTable(j).Equals(baseColor) Then
                         base = j
                         colorVariant = i
@@ -178,8 +189,30 @@ Namespace Data
                 Next
             Next
 
-            Return base * 4 + colorVariant
+            CacheAdd(colour, base*4 + colorVariant)
+
+            Return base*4 + colorVariant
         End Function
+
+        Public Shared Sub CacheAdd(key As ColourRGB, value As Byte)
+            If ColourCache.ContainsKey(key)
+                Return
+            End If
+
+            ColourCache.Add(key, value)
+        End Sub
+
+        Public Shared Function CacheGetValue(key As ColourRGB) As Byte?
+            If Not ColourCache.ContainsKey(key)
+                Return Nothing
+            End If
+
+            Return ColourCache(key)
+        End Function
+
+        Public Shared Sub Clear()
+            ColourCache.Clear()
+        End Sub
 
         Public Shared Function CombineLayers(bottom As Byte(), top As Byte()) As Byte()
             Dim newLayer = bottom.Clone()
@@ -194,9 +227,9 @@ Namespace Data
         End Function
 
         Public Shared Sub SetPixel(ByRef layer As Byte(), x As Integer, y As Integer, colour As Byte)
-            Dim pos = (y * 128) + x
+            Dim pos = (y*128) + x
 
-            If pos > -1 And pos < layer.Length Then
+            If pos > - 1 And pos < layer.Length Then
                 layer(pos) = colour
             End If
         End Sub

@@ -69,7 +69,7 @@ Namespace Data
             End If
 
             For i = 0 To Width - 1
-                worker.ReportProgress(Math.Round((i / Width) * colorDiffPercent), "Converting to colour palette...")
+                worker.ReportProgress(Math.Round((i / Width) * colorDiffPercent), "Converting to limited colour palette...")
                 For j = 0 To Height - 1
                     Dim colourRgb = New ColourRGB(scaledBitmap.GetPixel(i, j))
 
