@@ -1,4 +1,5 @@
 ﻿
+Imports MinecraftMapManager.Data
 
 Namespace Colour.Conversions
     Public Structure ColourRGB
@@ -42,7 +43,7 @@ Namespace Colour.Conversions
         End Function
 
         Public Function ToColor() As Color
-            Return Color.FromArgb(R, G, B)
+            Return Color.FromArgb(Clamp(R, 0, 255), Clamp(G, 0, 255), Clamp(B, 0, 255))
         End Function
 
         Public Function Vectorise() As List(Of Double) Implements IVectorable.Vectorise
@@ -56,6 +57,32 @@ Namespace Colour.Conversions
         Public Overrides Function Equals(obj As Object) As Boolean
             Return R = obj.R And G = obj.G And B = obj.B
         End Function
+
+        Public Shared Operator +(colour1 As ColourRGB, colour2 As ColourRGB) As ColourRGB
+            Return New ColourRGB(colour1.R + colour2.R, colour1.G + colour2.G, colour1.B + colour2.B)
+        End Operator
+
+        Public Shared Operator -(colour1 As ColourRGB, colour2 As ColourRGB) As ColourRGB
+            Return New ColourRGB(colour1.R - colour2.R, colour1.G - colour2.G, colour1.B - colour2.B)
+        End Operator
+
+        Public Shared Operator *(colour1 As ColourRGB, colour2 As ColourRGB) As ColourRGB
+            Return New ColourRGB(colour1.R*colour2.R, colour1.G*colour2.G, colour1.B*colour2.B)
+        End Operator
+
+        Public Shared Operator *(colour1 As ColourRGB, multiplier As Double) As ColourRGB
+            Return New ColourRGB(colour1.R*multiplier, colour1.G*multiplier, colour1.B*multiplier)
+        End Operator
+
+        Public Shared Operator /(colour1 As ColourRGB, colour2 As ColourRGB) As ColourRGB
+            ' Cannot divide by 0
+            Dim r2 = Util.Clamp(colour2.R, 1, 255)
+            Dim g2 = Util.Clamp(colour2.G, 1, 255)
+            Dim b2 = Util.Clamp(colour2.B, 1, 255)
+
+            Return New ColourRGB(colour1.R/r2, colour1.G/g2, colour1.B/b2)
+        End Operator
+
 
         Public Function ToColor(workingSpace As WorkingSpace.WorkingSpace) As Color Implements IColour.ToColor
             Return ToColor()

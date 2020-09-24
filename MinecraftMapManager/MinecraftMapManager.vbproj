@@ -78,6 +78,7 @@
     <Import Include="System.Threading.Tasks" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Colour\BitmapExtensions.vb" />
     <Compile Include="Colour\ColourCache.vb" />
     <Compile Include="Colour\Conversions\ColourLAB.vb" />
     <Compile Include="Colour\Conversions\ColourLinearRGB.vb" />
@@ -87,6 +88,8 @@
     <Compile Include="Colour\Conversions\IVectorable.vb" />
     <Compile Include="Colour\Difference\Euclidean.vb" />
     <Compile Include="Colour\Difference\IColourDifference.vb" />
+    <Compile Include="Colour\Dithering\FloydSteinberg.vb" />
+    <Compile Include="Colour\Dithering\IDither.vb" />
     <Compile Include="Colour\Matrices.vb" />
     <Compile Include="Colour\MatrixExtensions.vb" />
     <Compile Include="Colour\WorkingSpace\ChromaticityCoords.vb" />

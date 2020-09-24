@@ -1,9 +1,11 @@
 ﻿
 Imports System.ComponentModel
+Imports System.Diagnostics.Eventing.Reader
 Imports System.Windows.Forms.VisualStyles
 Imports MinecraftMapManager.Colour
 Imports MinecraftMapManager.Colour.Conversions
 Imports MinecraftMapManager.Colour.Difference
+Imports MinecraftMapManager.Colour.Dithering
 
 Namespace Data
     Public Class MapImage
@@ -37,6 +39,13 @@ Namespace Data
             End Using
         End Function
 
+        Public Delegate Sub DitherProgress(i As Integer, worker As BackgroundWorker)
+
+        Private Sub ReportDitherProgress(i As Integer, worker As BackgroundWorker)
+            worker.ReportProgress(Math.Round((i/Image.Width)*70),
+                                  "Converting to limited colour palette...")
+        End Sub
+
         Public Function ProcessImage(worker As BackgroundWorker) As Bitmap
             ' Scale with interpolation mode
             Dim scaledBitmap = New Bitmap(Width, Height)
@@ -61,48 +70,37 @@ Namespace Data
             End Select
 
             Dim colorDiffPercent = 70
-            Dim colorDitherPercent = 0
 
-            If Not ProcessSettings.Dithering = MapImageDithering.None Then
-                colorDiffPercent = 40
-                colorDitherPercent = 20
-            End If
+            Dim colourDitherMode As IDither = Nothing
+            Select Case ProcessSettings.Dithering
+                Case MapImageDithering.FloydSteinberg
+                    colourDitherMode = New FloydSteinberg(colourDiffMode, worker, AddressOf ReportDitherProgress)
+            End Select
 
-            For i = 0 To Width - 1
-                worker.ReportProgress(Math.Round((i / Width) * colorDiffPercent), "Converting to limited colour palette...")
-                For j = 0 To Height - 1
-                    Dim colourRgb = New ColourRGB(scaledBitmap.GetPixel(i, j))
+            worker.ReportProgress(0, "Converting to limited colour palette...")
 
-                    Dim nearestColour As ColourRGB? = ColourCache.GetValue(colourRgb)
-                    If nearestColour IsNot Nothing Then
+            If colourDitherMode IsNot Nothing
+                ' Dither
+                Image = colourDitherMode.CalculateDither(scaledBitmap)
+            Else
+                ' Use plain colour difference algorithm
+                For i = 0 To Width - 1
+                    worker.ReportProgress(Math.Round((i/Width)*colorDiffPercent),
+                                          "Converting to limited colour palette...")
+                    For j = 0 To Height - 1
+                        Dim colourRgb = New ColourRGB(scaledBitmap.GetPixel(i, j))
+
+                        Dim nearestColour = colourDiffMode.GetClosestColour(colourRgb)
                         Image.SetPixel(i, j, CType(nearestColour, ColourRGB).ToColor())
-                    Else
-                        Dim lowest As ColourRGB
-                        Dim lowestValue As Double = 100000
-                        For Each color As ColourRGB In ColourCache.RgbColourPalette
-                            Dim value = colourDiffMode.CalculateDifference(color, colourRgb)
-                            If value < lowestValue Then
-                                lowestValue = value
-                                lowest = color
-                            End If
-                        Next
-                        ColourCache.Add(colourRgb, lowest)
-                        Image.SetPixel(i, j, lowest.ToColor())
-                    End If
+                    Next
                 Next
-            Next
-
-            ' TODO: Dither
+            End If
 
             Return Image
         End Function
 
         Public Sub ConvertToLayer(ByRef layer As Byte(), worker As BackgroundWorker)
             Dim convertPercent = 30
-
-            If Not ProcessSettings.Dithering = MapImageDithering.None
-                convertPercent = 20
-            End If
 
             worker.ReportProgress(100 - convertPercent, "Converting to Minecraft colours...")
 

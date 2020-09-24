@@ -20,5 +20,24 @@ Namespace Colour.Difference
 
             Return (r + g + b)
         End Function
+
+        Public Function GetClosestColour(colour1 As IColour) As IColour Implements IColourDifference.GetClosestColour
+            Dim nearestColour As ColourRGB? = ColourCache.GetValue(colour1)
+            If nearestColour IsNot Nothing Then
+                Return nearestColour
+            Else
+                Dim lowest As ColourRGB
+                Dim lowestValue As Double = 100000
+                For Each color As ColourRGB In ColourCache.RgbColourPalette
+                    Dim value = Me.CalculateDifference(color, colour1)
+                    If value < lowestValue Then
+                        lowestValue = value
+                        lowest = color
+                    End If
+                Next
+                ColourCache.Add(colour1, lowest)
+                Return lowest
+            End If
+        End Function
     End Class
 End NameSpace
