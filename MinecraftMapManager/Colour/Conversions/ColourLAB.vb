@@ -42,6 +42,17 @@ Namespace Colour.Conversions
             Return ToLinearRGB(workingSpace).ToRGB(workingSpace)
         End Function
 
+        Public Function ToLCHab(workingSpace As WorkingSpace.WorkingSpace) As ColourLCHab
+            Dim c = Math.Sqrt(A*A + B*B)
+            Dim h = 0
+            If Math.Atan2(A, B) >= 0
+                h = Math.Atan2(A, B)
+            Else
+                h = Math.Atan2(A, B) + 360
+            End If
+            Return New ColourLCHab(L, c, h)
+        End Function
+
         Public Function Vectorise() As List(Of Double) Implements IVectorable.Vectorise
             Return New List(Of Double) From {L, A, B}
         End Function

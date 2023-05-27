@@ -47,6 +47,10 @@
   <PropertyGroup>
     <OptionInfer>On</OptionInfer>
   </PropertyGroup>
+  <PropertyGroup>
+    <GenerateResourceMSBuildArchitecture>CurrentArchitecture</GenerateResourceMSBuildArchitecture>
+    <GenerateResourceMSBuildRuntime>CurrentRuntime</GenerateResourceMSBuildRuntime>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="fNbt, Version=0.6.4.0, Culture=neutral, PublicKeyToken=null">
       <HintPath>..\packages\fNbt.0.6.4\lib\net35-client\fNbt.dll</HintPath>
@@ -81,11 +85,14 @@
     <Compile Include="Colour\BitmapExtensions.vb" />
     <Compile Include="Colour\ColourCache.vb" />
     <Compile Include="Colour\Conversions\ColourLAB.vb" />
+    <Compile Include="Colour\Conversions\ColourLCHab.vb" />
     <Compile Include="Colour\Conversions\ColourLinearRGB.vb" />
     <Compile Include="Colour\Conversions\ColourRGB.vb" />
     <Compile Include="Colour\Conversions\ColourXYZ.vb" />
     <Compile Include="Colour\Conversions\IColour.vb" />
     <Compile Include="Colour\Conversions\IVectorable.vb" />
+    <Compile Include="Colour\Difference\CIE76.vb" />
+    <Compile Include="Colour\Difference\CIE94.vb" />
     <Compile Include="Colour\Difference\Euclidean.vb" />
     <Compile Include="Colour\Difference\IColourDifference.vb" />
     <Compile Include="Colour\Dithering\FloydSteinberg.vb" />

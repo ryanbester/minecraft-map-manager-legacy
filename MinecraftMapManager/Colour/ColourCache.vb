@@ -4,6 +4,7 @@ Namespace Colour
     Public Class ColourCache
         Public Shared Dim RgbColourPalette As List(Of ColourRGB) = New List(Of ColourRGB)
         Public Shared Dim LabColourPalette As List(Of ColourLAB) = New List(Of ColourLAB)
+        Public Shared Dim LchAbColourPalette As List(Of ColourLCHab) = New List(Of ColourLCHab)()
 
         Private Shared ReadOnly Dim _
             Cache As Dictionary(Of ColourRGB, ColourRGB) = New Dictionary(Of ColourRGB, ColourRGB)
@@ -59,5 +60,21 @@ Namespace Colour
                 Next
             End If
         End Sub
+        
+        Public Shared Sub LoadLchAbColourPalette(settings As MapImageSettings)
+            If LchAbColourPalette.Count = 0
+                For Each color As Color In Data.MapColours.ColourTable
+                    If color.A = 0
+                        ' Do not allow transparency
+                        Continue For
+                    End If
+                    
+                    For Each colorVariant As Double In Data.MapColours.VariantTable
+                        Dim colourRgb = New ColourRGB(color.R*colorVariant, color.G*colorVariant, color.B*colorVariant)
+                        LchAbColourPalette.Add(colourRgb.ToLCHab(settings.WorkingSpace))
+                    Next
+                Next
+            End If
+        End Sub 
     End Class
 End NameSpace

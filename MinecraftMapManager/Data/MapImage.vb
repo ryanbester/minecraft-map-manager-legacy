@@ -65,6 +65,12 @@ Namespace Data
                 Case MapImageColourDifference.Euclidean
                     ColourCache.LoadRgbColourPalette(ProcessSettings)
                     colourDiffMode = New Euclidean()
+                Case MapImageColourDifference.CIE76
+                    ColourCache.LoadLabColourPalette(ProcessSettings)
+                    colourDiffMode = New CIE76(ProcessSettings.WorkingSpace)
+                Case MapImageColourDifference.CIE94
+                    ColourCache.LoadLabColourPalette(ProcessSettings)
+                    colourDiffMode = New CIE94(ProcessSettings.WorkingSpace)
                 Case Else
                     Return Nothing
             End Select

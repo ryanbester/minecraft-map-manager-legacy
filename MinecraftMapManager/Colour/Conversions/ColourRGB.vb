@@ -41,6 +41,10 @@ Namespace Colour.Conversions
         Public Function ToLAB(workingSpace As WorkingSpace.WorkingSpace) As ColourLAB
             Return ToXYZ(workingSpace).ToLAB(workingSpace)
         End Function
+        
+        Public Function ToLCHab(workingSpace As WorkingSpace.WorkingSpace) As ColourLCHab
+            Return ToLAB(workingSpace).ToLCHab(workingSpace)
+        End Function
 
         Public Function ToColor() As Color
             Return Color.FromArgb(Clamp(R, 0, 255), Clamp(G, 0, 255), Clamp(B, 0, 255))

@@ -14,10 +14,10 @@ Namespace Colour.Difference
             Dim colour1New = CType(colour1, ColourRGB)
             Dim colour2New = CType(colour2, ColourRGB)
 
-            Dim r = (colour1New.R - colour2New.R)^2
-            Dim g = (colour1New.G - colour2New.G)^2
-            Dim b = (colour1New.B - colour2New.B)^2
-
+            Dim r = (colour1New.R - colour2New.R)*(colour1New.R - colour2New.R)
+            Dim g = (colour1New.G - colour2New.G)*(colour1New.G - colour2New.G)
+            Dim b = (colour1New.B - colour2New.B)*(colour1New.B - colour2New.B)
+            
             Return (r + g + b)
         End Function
 
