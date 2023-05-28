@@ -2,7 +2,7 @@
  
  ## ⚠️ Discontinued
  
-Development for this tool has been continued in [here](github.com/ryanbester/minecraft-map-manager). I wasn't able to easily upgrade the legacy VB code so I decided to rewrite the tool in Go.
+Development for this tool has been continued in [here](https://github.com/ryanbester/minecraft-map-manager). I wasn't able to easily upgrade the legacy VB code so I decided to rewrite the tool in Go.
 
 A tool to create, delete, and edit maps on a Minecraft world, and easily convert images to map art.
 
